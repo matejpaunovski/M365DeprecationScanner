@@ -22,7 +22,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Install tools
         shell: pwsh
@@ -43,7 +43,7 @@ jobs:
     name: Test (Windows PowerShell 5.1)
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Install Pester 5
         shell: powershell
@@ -65,7 +65,7 @@ jobs:
     name: Action smoke test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Run the action against the legacy example
         id: scan
