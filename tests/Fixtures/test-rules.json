@@ -1,0 +1,63 @@
+{
+  "$schema": "../../src/M365DeprecationScanner/Data/deprecations.schema.json",
+  "schemaVersion": 1,
+  "lastUpdated": "2026-10-16",
+  "rules": [
+    {
+      "id": "TEST0001",
+      "kind": "Module",
+      "pattern": "LegacyModule",
+      "area": "Other",
+      "status": "Retired",
+      "title": "LegacyModule is retired.",
+      "replacement": "ModernModule",
+      "sources": ["https://example.com/legacy-module"]
+    },
+    {
+      "id": "TEST0002",
+      "kind": "Command",
+      "pattern": "Get-LegacyUser",
+      "area": "Other",
+      "status": "Retired",
+      "title": "Get-LegacyUser is retired.",
+      "replacement": "Get-ModernUser",
+      "replacementModule": "ModernModule.Users",
+      "notes": "Use -Property to request extra properties.",
+      "retirementDate": "2025-05-01",
+      "sources": ["https://example.com/get-legacyuser"]
+    },
+    {
+      "id": "TEST0003",
+      "kind": "Command",
+      "pattern": "*-Legacy*",
+      "exclude": ["Remove-LegacyAlias"],
+      "area": "Other",
+      "status": "Retired",
+      "title": "Commands from LegacyModule are retired.",
+      "replacement": "See the cmdlet map",
+      "sources": ["https://example.com/cmdlet-map"]
+    },
+    {
+      "id": "TEST0004",
+      "kind": "Parameter",
+      "command": "Connect-Service",
+      "pattern": "UseOldProtocol",
+      "area": "Other",
+      "status": "Deprecated",
+      "title": "The old protocol is deprecated.",
+      "replacement": "Connect-Service without -UseOldProtocol",
+      "sources": ["https://example.com/old-protocol"]
+    },
+    {
+      "id": "TEST0005",
+      "kind": "StringLiteral",
+      "pattern": "old-api\\.example\\.com",
+      "area": "Other",
+      "status": "Announced",
+      "retirementDate": "2027-01",
+      "title": "old-api.example.com will be retired.",
+      "replacement": "new-api.example.com",
+      "sources": ["https://example.com/old-api"]
+    }
+  ]
+}

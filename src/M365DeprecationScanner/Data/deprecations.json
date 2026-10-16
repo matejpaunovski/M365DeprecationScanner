@@ -1,0 +1,2596 @@
+{
+  "$schema": "./deprecations.schema.json",
+  "schemaVersion": 1,
+  "lastUpdated": "2026-10-16",
+  "rules": [
+    {
+      "id": "MSOL0001",
+      "kind": "Module",
+      "pattern": "MSOnline",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "The MSOnline module is retired and no longer works.",
+      "replacement": "Microsoft Graph PowerShell SDK (or Microsoft Entra PowerShell)",
+      "replacementModule": "Microsoft.Graph",
+      "notes": "MSOnline stopped working for all tenants between early April and late May 2025. Install only the Microsoft.Graph.* sub-modules you need and map each cmdlet with the official cmdlet map.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/identity/action-required-msonline-and-azuread-powershell-retirement---2025-info-and-resou/4364991",
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0002",
+      "kind": "Command",
+      "pattern": "Connect-MsolService",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Connect-MsolService is part of the retired MSOnline module.",
+      "replacement": "Connect-MgGraph",
+      "replacementModule": "Microsoft.Graph.Authentication",
+      "notes": "Use Connect-MgGraph -Scopes <least-privileged scopes> (delegated) or -ClientId/-TenantId/-CertificateThumbprint (app-only). Graph permissions are not pre-authorized and need consent. Connect-Entra (Microsoft Entra PowerShell) is an alternative.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline",
+        "https://techcommunity.microsoft.com/blog/identity/action-required-msonline-and-azuread-powershell-retirement---2025-info-and-resou/4364991"
+      ]
+    },
+    {
+      "id": "MSOL0003",
+      "kind": "Command",
+      "pattern": "Get-MsolUser",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolUser is part of the retired MSOnline module.",
+      "replacement": "Get-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Get-MgUser returns only a default property set; request others with -Property (e.g. AssignedLicenses, SignInActivity). Use -All for paging and OData -Filter syntax. Needs User.Read.All (SignInActivity also needs AuditLog.Read.All).",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0004",
+      "kind": "Command",
+      "pattern": "Set-MsolUser",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolUser is part of the retired MSOnline module.",
+      "replacement": "Update-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Update-MgUser uses Graph property names (e.g. -UsageLocation, -JobTitle). Strong authentication (per-user MFA) settings are not part of Update-MgUser.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0005",
+      "kind": "Command",
+      "pattern": "New-MsolUser",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "New-MsolUser is part of the retired MSOnline module.",
+      "replacement": "New-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "New-MgUser requires -AccountEnabled, -DisplayName, -MailNickname, -UserPrincipalName and -PasswordProfile (hashtable).",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0006",
+      "kind": "Command",
+      "pattern": "Remove-MsolUser",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolUser is part of the retired MSOnline module.",
+      "replacement": "Remove-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0007",
+      "kind": "Command",
+      "pattern": "Restore-MsolUser",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Restore-MsolUser is part of the retired MSOnline module.",
+      "replacement": "Restore-MgDirectoryDeletedItem",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Use Restore-MgDirectoryDeletedItem -DirectoryObjectId <user id>.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0008",
+      "kind": "Command",
+      "pattern": "Set-MsolUserLicense",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolUserLicense is part of the retired MSOnline module.",
+      "replacement": "Set-MgUserLicense",
+      "replacementModule": "Microsoft.Graph.Users.Actions",
+      "notes": "Set-MgUserLicense needs both -AddLicenses and -RemoveLicenses (pass @() for the unused one). Disabled service plans go into the disabledPlans property of each -AddLicenses entry. The user needs a UsageLocation.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0009",
+      "kind": "Command",
+      "pattern": "New-MsolLicenseOptions",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "New-MsolLicenseOptions is part of the retired MSOnline module.",
+      "replacement": "Set-MgUserLicense",
+      "replacementModule": "Microsoft.Graph.Users.Actions",
+      "notes": "No separate object in Graph: put the service plans to disable in the disabledPlans array of the -AddLicenses hashtable of Set-MgUserLicense.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0010",
+      "kind": "Command",
+      "pattern": "Set-MsolUserPassword",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolUserPassword is part of the retired MSOnline module.",
+      "replacement": "Reset-MgUserAuthenticationMethodPassword",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "notes": "The official map points to Reset-MgUserAuthenticationMethodPassword. Admin password resets are also commonly done with Update-MgUser -PasswordProfile @{ Password = ...; ForceChangePasswordNextSignIn = $true }.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0011",
+      "kind": "Command",
+      "pattern": "Set-MsolUserPrincipalName",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolUserPrincipalName is part of the retired MSOnline module.",
+      "replacement": "Update-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Use Update-MgUser -UserId <id> -UserPrincipalName <new UPN>.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0012",
+      "kind": "Command",
+      "pattern": "Get-MsolUserRole",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolUserRole is part of the retired MSOnline module.",
+      "replacement": "Get-MgUserMemberOf",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0013",
+      "kind": "Command",
+      "pattern": "Get-MsolAccountSku",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolAccountSku is part of the retired MSOnline module.",
+      "replacement": "Get-MgSubscribedSku",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Get-MgSubscribedSku returns SkuPartNumber, SkuId, ConsumedUnits and PrepaidUnits. AccountSkuId (tenant:SKU) no longer exists; use SkuId GUIDs.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0014",
+      "kind": "Command",
+      "pattern": "Get-MsolSubscription",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolSubscription is part of the retired MSOnline module.",
+      "replacement": "Get-MgDirectorySubscription",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0015",
+      "kind": "Command",
+      "pattern": "Get-MsolCompanyInformation",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolCompanyInformation is part of the retired MSOnline module.",
+      "replacement": "Get-MgOrganization",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Get-MgOrganization returns tenant properties such as VerifiedDomains, OnPremisesSyncEnabled and technical notification mails.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0016",
+      "kind": "Command",
+      "pattern": "Set-MsolCompanySettings",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolCompanySettings is part of the retired MSOnline module.",
+      "replacement": "Update-MgOrganization or Update-MgPolicyAuthorizationPolicy",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement, Microsoft.Graph.Identity.SignIns",
+      "notes": "Split by setting: organization properties via Update-MgOrganization, user default permissions (e.g. allowed to create apps/groups) via Update-MgPolicyAuthorizationPolicy.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0017",
+      "kind": "Command",
+      "pattern": "Get-MsolDomain",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolDomain is part of the retired MSOnline module.",
+      "replacement": "Get-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0018",
+      "kind": "Command",
+      "pattern": "New-MsolDomain",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "New-MsolDomain is part of the retired MSOnline module.",
+      "replacement": "New-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0019",
+      "kind": "Command",
+      "pattern": "Set-MsolDomain",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolDomain is part of the retired MSOnline module.",
+      "replacement": "Update-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0020",
+      "kind": "Command",
+      "pattern": "Remove-MsolDomain",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolDomain is part of the retired MSOnline module.",
+      "replacement": "Remove-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0021",
+      "kind": "Command",
+      "pattern": "Confirm-MsolDomain",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Confirm-MsolDomain is part of the retired MSOnline module.",
+      "replacement": "Confirm-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0022",
+      "kind": "Command",
+      "pattern": "Get-MsolDomainVerificationDns",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolDomainVerificationDns is part of the retired MSOnline module.",
+      "replacement": "Get-MgDomainVerificationDnsRecord",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0023",
+      "kind": "Command",
+      "pattern": "Get-MsolDomainFederationSettings",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolDomainFederationSettings is part of the retired MSOnline module.",
+      "replacement": "Get-MgDomainFederationConfiguration",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Federation settings are exposed as internalDomainFederation objects via Get-MgDomainFederationConfiguration.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0024",
+      "kind": "Command",
+      "pattern": "Set-MsolDomainFederationSettings",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolDomainFederationSettings is part of the retired MSOnline module.",
+      "replacement": "New-MgDomainFederationConfiguration",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0025",
+      "kind": "Command",
+      "pattern": "Set-MsolDomainAuthentication",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolDomainAuthentication is part of the retired MSOnline module.",
+      "replacement": "New-MgDomainFederationConfiguration",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Converting a domain to federated is done by creating a federation configuration (New-MgDomainFederationConfiguration); converting back by removing it.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0026",
+      "kind": "Command",
+      "pattern": "Get-MsolPasswordPolicy",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolPasswordPolicy is part of the retired MSOnline module.",
+      "replacement": "Get-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Password expiry settings are domain properties in Graph: PasswordValidityPeriodInDays and PasswordNotificationWindowInDays on Get-MgDomain.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0027",
+      "kind": "Command",
+      "pattern": "Set-MsolPasswordPolicy",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolPasswordPolicy is part of the retired MSOnline module.",
+      "replacement": "Update-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Use Update-MgDomain -DomainId <domain> -PasswordValidityPeriodInDays/-PasswordNotificationWindowInDays.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0028",
+      "kind": "Command",
+      "pattern": "Get-MsolGroup",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolGroup is part of the retired MSOnline module.",
+      "replacement": "Get-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0029",
+      "kind": "Command",
+      "pattern": "New-MsolGroup",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "New-MsolGroup is part of the retired MSOnline module.",
+      "replacement": "New-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0030",
+      "kind": "Command",
+      "pattern": "Set-MsolGroup",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolGroup is part of the retired MSOnline module.",
+      "replacement": "Update-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0031",
+      "kind": "Command",
+      "pattern": "Remove-MsolGroup",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolGroup is part of the retired MSOnline module.",
+      "replacement": "Remove-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0032",
+      "kind": "Command",
+      "pattern": "Get-MsolGroupMember",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolGroupMember is part of the retired MSOnline module.",
+      "replacement": "Get-MgGroupMember",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "notes": "Get-MgGroupMember returns directoryObjects; user details such as UPN are in AdditionalProperties. Use -All for large groups.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0033",
+      "kind": "Command",
+      "pattern": "Add-MsolGroupMember",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Add-MsolGroupMember is part of the retired MSOnline module.",
+      "replacement": "New-MgGroupMemberByRef",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "notes": "New-MgGroupMemberByRef -GroupId <id> -OdataId \"https://graph.microsoft.com/v1.0/directoryObjects/<member id>\".",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0034",
+      "kind": "Command",
+      "pattern": "Remove-MsolGroupMember",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolGroupMember is part of the retired MSOnline module.",
+      "replacement": "Remove-MgGroupMemberByRef",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0035",
+      "kind": "Command",
+      "pattern": "Get-MsolRole",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolRole is part of the retired MSOnline module.",
+      "replacement": "Get-MgDirectoryRole",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0036",
+      "kind": "Command",
+      "pattern": "Get-MsolRoleMember",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolRoleMember is part of the retired MSOnline module.",
+      "replacement": "Get-MgDirectoryRoleMember",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Get-MgDirectoryRoleMember only works for activated roles (Get-MgDirectoryRole). For assignments incl. PIM use the roleManagement cmdlets (Get-MgRoleManagementDirectoryRoleAssignment).",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0037",
+      "kind": "Command",
+      "pattern": "Add-MsolRoleMember",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Add-MsolRoleMember is part of the retired MSOnline module.",
+      "replacement": "New-MgDirectoryRoleMemberByRef",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0038",
+      "kind": "Command",
+      "pattern": "Remove-MsolRoleMember",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolRoleMember is part of the retired MSOnline module.",
+      "replacement": "Remove-MgDirectoryRoleMemberByRef",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0039",
+      "kind": "Command",
+      "pattern": "Get-MsolContact",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolContact is part of the retired MSOnline module.",
+      "replacement": "Get-MgContact",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0040",
+      "kind": "Command",
+      "pattern": "Remove-MsolContact",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolContact is part of the retired MSOnline module.",
+      "replacement": "Remove-MgContact",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0041",
+      "kind": "Command",
+      "pattern": "Get-MsolDevice",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolDevice is part of the retired MSOnline module.",
+      "replacement": "Get-MgDevice",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0042",
+      "kind": "Command",
+      "pattern": "Enable-MsolDevice",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Enable-MsolDevice is part of the retired MSOnline module.",
+      "replacement": "Update-MgDevice",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0043",
+      "kind": "Command",
+      "pattern": "Disable-MsolDevice",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Disable-MsolDevice is part of the retired MSOnline module.",
+      "replacement": "Update-MgDevice",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0044",
+      "kind": "Command",
+      "pattern": "Remove-MsolDevice",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolDevice is part of the retired MSOnline module.",
+      "replacement": "Remove-MgDevice",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0045",
+      "kind": "Command",
+      "pattern": "Get-MsolServicePrincipal",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolServicePrincipal is part of the retired MSOnline module.",
+      "replacement": "Get-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0046",
+      "kind": "Command",
+      "pattern": "New-MsolServicePrincipal",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "New-MsolServicePrincipal is part of the retired MSOnline module.",
+      "replacement": "New-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0047",
+      "kind": "Command",
+      "pattern": "Remove-MsolServicePrincipal",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Remove-MsolServicePrincipal is part of the retired MSOnline module.",
+      "replacement": "Remove-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0048",
+      "kind": "Command",
+      "pattern": "Get-MsolServicePrincipalCredential",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolServicePrincipalCredential is part of the retired MSOnline module.",
+      "replacement": "Get-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0049",
+      "kind": "Command",
+      "pattern": "New-MsolServicePrincipalCredential",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "New-MsolServicePrincipalCredential is part of the retired MSOnline module.",
+      "replacement": "Add-MgServicePrincipalKey",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0050",
+      "kind": "Command",
+      "pattern": "Get-MsolDirSyncConfiguration",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolDirSyncConfiguration is part of the retired MSOnline module.",
+      "replacement": "Get-MgDirectoryOnPremiseSynchronization",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0051",
+      "kind": "Command",
+      "pattern": "Get-MsolDirSyncFeatures",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolDirSyncFeatures is part of the retired MSOnline module.",
+      "replacement": "Get-MgDirectoryOnPremiseSynchronization",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0052",
+      "kind": "Command",
+      "pattern": "Set-MsolDirSyncFeature",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolDirSyncFeature is part of the retired MSOnline module.",
+      "replacement": "Update-MgDirectoryOnPremiseSynchronization",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0053",
+      "kind": "Command",
+      "pattern": "Set-MsolDirSyncEnabled",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Set-MsolDirSyncEnabled is part of the retired MSOnline module.",
+      "replacement": "Update-MgOrganization",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Disable directory sync with Update-MgOrganization -OrganizationId <id> -OnPremisesSyncEnabled:$false.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0054",
+      "kind": "Command",
+      "pattern": "Get-MsolAdministrativeUnit",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolAdministrativeUnit is part of the retired MSOnline module.",
+      "replacement": "Get-MgDirectoryAdministrativeUnit",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0055",
+      "kind": "Command",
+      "pattern": "Get-MsolPartnerContract",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "Get-MsolPartnerContract is part of the retired MSOnline module.",
+      "replacement": "Get-MgContract",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline"
+      ]
+    },
+    {
+      "id": "MSOL0056",
+      "kind": "Command",
+      "pattern": "*-Msol*",
+      "area": "MSOnline",
+      "module": "MSOnline",
+      "status": "Retired",
+      "retirementDate": "2025-05",
+      "title": "This cmdlet belongs to the retired MSOnline module.",
+      "replacement": "See the official cmdlet map for the Microsoft Graph PowerShell equivalent",
+      "replacementModule": "Microsoft.Graph",
+      "notes": "Some MSOnline cmdlets (e.g. Get-MsolUserByStrongAuthentication, Reset-MsolStrongAuthenticationMethodByUpn) have no direct Graph PowerShell equivalent in the map; review the scenario and use the related Graph API.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=msonline",
+        "https://techcommunity.microsoft.com/blog/identity/action-required-msonline-and-azuread-powershell-retirement---2025-info-and-resou/4364991"
+      ]
+    },
+    {
+      "id": "AAD0001",
+      "kind": "Module",
+      "pattern": "AzureAD",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "The AzureAD module is retired and no longer works.",
+      "replacement": "Microsoft Graph PowerShell SDK (or Microsoft Entra PowerShell)",
+      "replacementModule": "Microsoft.Graph",
+      "notes": "Microsoft announced that AzureAD and AzureAD-Preview stop working starting mid-October 2025. Bridge option: Microsoft Entra PowerShell (Connect-Entra + Enable-EntraAzureADAlias) runs most AzureAD cmdlet names unchanged while you migrate.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/microsoft-entra-blog/important-update-azuread-powershell-retirement/4364989",
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell",
+        "https://learn.microsoft.com/en-us/powershell/entra-powershell/migration-guide?view=entra-powershell"
+      ]
+    },
+    {
+      "id": "AAD0002",
+      "kind": "Module",
+      "pattern": "AzureADPreview",
+      "area": "AzureAD",
+      "module": "AzureADPreview",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "The AzureADPreview module is retired and no longer works.",
+      "replacement": "Microsoft Graph PowerShell SDK (Microsoft.Graph / Microsoft.Graph.Beta) or Microsoft Entra PowerShell",
+      "replacementModule": "Microsoft.Graph",
+      "notes": "Preview-only cmdlets usually map to Microsoft.Graph.Beta (*-MgBeta*) cmdlets. Bridge option: Microsoft Entra PowerShell (Connect-Entra + Enable-EntraAzureADAlias) runs most AzureAD cmdlet names unchanged while you migrate.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/microsoft-entra-blog/important-update-azuread-powershell-retirement/4364989",
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-preview",
+        "https://learn.microsoft.com/en-us/powershell/entra-powershell/migration-guide?view=entra-powershell"
+      ]
+    },
+    {
+      "id": "AAD0003",
+      "kind": "Command",
+      "pattern": "Connect-AzureAD",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Connect-AzureAD is part of the retired AzureAD module.",
+      "replacement": "Connect-MgGraph",
+      "replacementModule": "Microsoft.Graph.Authentication",
+      "notes": "Use Connect-MgGraph -Scopes <least-privileged scopes> or app-only auth with a certificate. Permissions are not pre-authorized and need consent. Bridge option: Microsoft Entra PowerShell (Connect-Entra + Enable-EntraAzureADAlias) runs most AzureAD cmdlet names unchanged while you migrate.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell",
+        "https://techcommunity.microsoft.com/blog/microsoft-entra-blog/important-update-azuread-powershell-retirement/4364989",
+        "https://learn.microsoft.com/en-us/powershell/entra-powershell/migration-guide?view=entra-powershell"
+      ]
+    },
+    {
+      "id": "AAD0004",
+      "kind": "Command",
+      "pattern": "Get-AzureADUser",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUser is part of the retired AzureAD module.",
+      "replacement": "Get-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Get-MgUser: -SearchString maps to -Search with -ConsistencyLevel eventual (or use -Filter); -All:$true becomes the -All switch; request extra properties with -Property. Needs User.Read.All.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0005",
+      "kind": "Command",
+      "pattern": "New-AzureADUser",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADUser is part of the retired AzureAD module.",
+      "replacement": "New-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "New-MgUser -PasswordProfile takes a hashtable (e.g. @{ Password = ...; ForceChangePasswordNextSignIn = $true }) instead of a PasswordProfile object.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0006",
+      "kind": "Command",
+      "pattern": "Set-AzureADUser",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADUser is part of the retired AzureAD module.",
+      "replacement": "Update-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Update-MgUser uses Graph property names; directory extension attributes are set via -AdditionalProperties.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0007",
+      "kind": "Command",
+      "pattern": "Remove-AzureADUser",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADUser is part of the retired AzureAD module.",
+      "replacement": "Remove-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0008",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserManager",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserManager is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserManager",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0009",
+      "kind": "Command",
+      "pattern": "Set-AzureADUserManager",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADUserManager is part of the retired AzureAD module.",
+      "replacement": "Set-MgUserManagerByRef",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Set-MgUserManagerByRef -UserId <id> -BodyParameter @{ \"@odata.id\" = \"https://graph.microsoft.com/v1.0/users/<manager id>\" }.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0010",
+      "kind": "Command",
+      "pattern": "Remove-AzureADUserManager",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADUserManager is part of the retired AzureAD module.",
+      "replacement": "Remove-MgUserManagerByRef",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0011",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserMembership",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserMembership is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserMemberOf",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Get-MgUserMemberOf returns directoryObjects (groups, roles, AUs); details are in AdditionalProperties. Use Get-MgUserTransitiveMemberOf for nested membership.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0012",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserDirectReport",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserDirectReport is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserDirectReport",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0013",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserLicenseDetail",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserLicenseDetail is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserLicenseDetail",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0014",
+      "kind": "Command",
+      "pattern": "Set-AzureADUserLicense",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADUserLicense is part of the retired AzureAD module.",
+      "replacement": "Set-MgUserLicense",
+      "replacementModule": "Microsoft.Graph.Users.Actions",
+      "notes": "Set-MgUserLicense needs both -AddLicenses and -RemoveLicenses (pass @() for the unused one); AssignedLicenses objects become hashtables with SkuId and DisabledPlans.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0015",
+      "kind": "Command",
+      "pattern": "Set-AzureADUserPassword",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADUserPassword is part of the retired AzureAD module.",
+      "replacement": "Update-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "notes": "Per the official map use Update-MgUser -PasswordProfile @{ Password = ...; ForceChangePasswordNextSignIn = $true }.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0016",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserRegisteredDevice",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserRegisteredDevice is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserRegisteredDevice",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0017",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserOwnedDevice",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserOwnedDevice is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserOwnedDevice",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0018",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserOwnedObject",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserOwnedObject is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserOwnedObject",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0019",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserExtension",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserExtension is part of the retired AzureAD module.",
+      "replacement": "Get-MgUser",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0020",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserThumbnailPhoto",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserThumbnailPhoto is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserPhoto",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0021",
+      "kind": "Command",
+      "pattern": "Set-AzureADUserThumbnailPhoto",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADUserThumbnailPhoto is part of the retired AzureAD module.",
+      "replacement": "Set-MgUserPhotoContent",
+      "replacementModule": "Microsoft.Graph.Users",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0022",
+      "kind": "Command",
+      "pattern": "Get-AzureADUserAppRoleAssignment",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADUserAppRoleAssignment is part of the retired AzureAD module.",
+      "replacement": "Get-MgUserAppRoleAssignment",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0023",
+      "kind": "Command",
+      "pattern": "Revoke-AzureADUserAllRefreshToken",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Revoke-AzureADUserAllRefreshToken is part of the retired AzureAD module.",
+      "replacement": "Revoke-MgUserSignInSession",
+      "replacementModule": "Microsoft.Graph.Users.Actions",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0024",
+      "kind": "Command",
+      "pattern": "Get-AzureADGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADGroup is part of the retired AzureAD module.",
+      "replacement": "Get-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0025",
+      "kind": "Command",
+      "pattern": "New-AzureADGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADGroup is part of the retired AzureAD module.",
+      "replacement": "New-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0026",
+      "kind": "Command",
+      "pattern": "Set-AzureADGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADGroup is part of the retired AzureAD module.",
+      "replacement": "Update-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0027",
+      "kind": "Command",
+      "pattern": "Remove-AzureADGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADGroup is part of the retired AzureAD module.",
+      "replacement": "Remove-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0028",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSGroup is part of the retired AzureAD module.",
+      "replacement": "Get-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0029",
+      "kind": "Command",
+      "pattern": "New-AzureADMSGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADMSGroup is part of the retired AzureAD module.",
+      "replacement": "New-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0030",
+      "kind": "Command",
+      "pattern": "Set-AzureADMSGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADMSGroup is part of the retired AzureAD module.",
+      "replacement": "Update-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0031",
+      "kind": "Command",
+      "pattern": "Remove-AzureADMSGroup",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADMSGroup is part of the retired AzureAD module.",
+      "replacement": "Remove-MgGroup",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0032",
+      "kind": "Command",
+      "pattern": "Get-AzureADGroupMember",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADGroupMember is part of the retired AzureAD module.",
+      "replacement": "Get-MgGroupMember",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "notes": "Get-MgGroupMember returns directoryObjects; user properties such as UPN are in AdditionalProperties. Use -All instead of -All:$true.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0033",
+      "kind": "Command",
+      "pattern": "Add-AzureADGroupMember",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Add-AzureADGroupMember is part of the retired AzureAD module.",
+      "replacement": "New-MgGroupMemberByRef",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "notes": "New-MgGroupMemberByRef -GroupId <id> -OdataId \"https://graph.microsoft.com/v1.0/directoryObjects/<member id>\".",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0034",
+      "kind": "Command",
+      "pattern": "Remove-AzureADGroupMember",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADGroupMember is part of the retired AzureAD module.",
+      "replacement": "Remove-MgGroupMemberByRef",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0035",
+      "kind": "Command",
+      "pattern": "Get-AzureADGroupOwner",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADGroupOwner is part of the retired AzureAD module.",
+      "replacement": "Get-MgGroupOwner",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0036",
+      "kind": "Command",
+      "pattern": "Add-AzureADGroupOwner",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Add-AzureADGroupOwner is part of the retired AzureAD module.",
+      "replacement": "New-MgGroupOwnerByRef",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0037",
+      "kind": "Command",
+      "pattern": "Remove-AzureADGroupOwner",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADGroupOwner is part of the retired AzureAD module.",
+      "replacement": "Remove-MgGroupOwnerByRef",
+      "replacementModule": "Microsoft.Graph.Groups",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0038",
+      "kind": "Command",
+      "pattern": "Get-AzureADApplication",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADApplication is part of the retired AzureAD module.",
+      "replacement": "Get-MgApplication",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0039",
+      "kind": "Command",
+      "pattern": "New-AzureADApplication",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADApplication is part of the retired AzureAD module.",
+      "replacement": "New-MgApplication",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0040",
+      "kind": "Command",
+      "pattern": "Set-AzureADApplication",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADApplication is part of the retired AzureAD module.",
+      "replacement": "Update-MgApplication",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0041",
+      "kind": "Command",
+      "pattern": "Remove-AzureADApplication",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADApplication is part of the retired AzureAD module.",
+      "replacement": "Remove-MgApplication",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0042",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSApplication",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSApplication is part of the retired AzureAD module.",
+      "replacement": "Get-MgApplication",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0043",
+      "kind": "Command",
+      "pattern": "New-AzureADMSApplication",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADMSApplication is part of the retired AzureAD module.",
+      "replacement": "New-MgApplication",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0044",
+      "kind": "Command",
+      "pattern": "Set-AzureADMSApplication",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADMSApplication is part of the retired AzureAD module.",
+      "replacement": "Update-MgApplication",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0045",
+      "kind": "Command",
+      "pattern": "New-AzureADMSApplicationPassword",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADMSApplicationPassword is part of the retired AzureAD module.",
+      "replacement": "Add-MgApplicationPassword",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "notes": "Add-MgApplicationPassword -ApplicationId <object id> -PasswordCredential @{ DisplayName = ...; EndDateTime = ... }; the secret is only returned once in SecretText.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0046",
+      "kind": "Command",
+      "pattern": "Remove-AzureADMSApplicationPassword",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADMSApplicationPassword is part of the retired AzureAD module.",
+      "replacement": "Remove-MgApplicationPassword",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0047",
+      "kind": "Command",
+      "pattern": "Get-AzureADServicePrincipal",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADServicePrincipal is part of the retired AzureAD module.",
+      "replacement": "Get-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "notes": "Get-MgServicePrincipal: filter by appId with -Filter \"appId eq '<guid>'\".",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0048",
+      "kind": "Command",
+      "pattern": "New-AzureADServicePrincipal",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADServicePrincipal is part of the retired AzureAD module.",
+      "replacement": "New-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0049",
+      "kind": "Command",
+      "pattern": "Set-AzureADServicePrincipal",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADServicePrincipal is part of the retired AzureAD module.",
+      "replacement": "Update-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0050",
+      "kind": "Command",
+      "pattern": "Remove-AzureADServicePrincipal",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADServicePrincipal is part of the retired AzureAD module.",
+      "replacement": "Remove-MgServicePrincipal",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0051",
+      "kind": "Command",
+      "pattern": "Get-AzureADServiceAppRoleAssignment",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADServiceAppRoleAssignment is part of the retired AzureAD module.",
+      "replacement": "Get-MgServicePrincipalAppRoleAssignment",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0052",
+      "kind": "Command",
+      "pattern": "New-AzureADServiceAppRoleAssignment",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADServiceAppRoleAssignment is part of the retired AzureAD module.",
+      "replacement": "New-MgServicePrincipalAppRoleAssignment",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0053",
+      "kind": "Command",
+      "pattern": "Get-AzureADServiceAppRoleAssignedTo",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADServiceAppRoleAssignedTo is part of the retired AzureAD module.",
+      "replacement": "Get-MgServicePrincipalAppRoleAssignedTo",
+      "replacementModule": "Microsoft.Graph.Applications",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0054",
+      "kind": "Command",
+      "pattern": "Get-AzureADDevice",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADDevice is part of the retired AzureAD module.",
+      "replacement": "Get-MgDevice",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0055",
+      "kind": "Command",
+      "pattern": "Set-AzureADDevice",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADDevice is part of the retired AzureAD module.",
+      "replacement": "Update-MgDevice",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0056",
+      "kind": "Command",
+      "pattern": "Remove-AzureADDevice",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADDevice is part of the retired AzureAD module.",
+      "replacement": "Remove-MgDevice",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0057",
+      "kind": "Command",
+      "pattern": "Get-AzureADDeviceRegisteredOwner",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADDeviceRegisteredOwner is part of the retired AzureAD module.",
+      "replacement": "Get-MgDeviceRegisteredOwner",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0058",
+      "kind": "Command",
+      "pattern": "Get-AzureADSubscribedSku",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADSubscribedSku is part of the retired AzureAD module.",
+      "replacement": "Get-MgSubscribedSku",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0059",
+      "kind": "Command",
+      "pattern": "Get-AzureADTenantDetail",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADTenantDetail is part of the retired AzureAD module.",
+      "replacement": "Get-MgOrganization",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0060",
+      "kind": "Command",
+      "pattern": "Get-AzureADDomain",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADDomain is part of the retired AzureAD module.",
+      "replacement": "Get-MgDomain",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0061",
+      "kind": "Command",
+      "pattern": "Get-AzureADContact",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADContact is part of the retired AzureAD module.",
+      "replacement": "Get-MgContact",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0062",
+      "kind": "Command",
+      "pattern": "Get-AzureADDirectoryRole",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADDirectoryRole is part of the retired AzureAD module.",
+      "replacement": "Get-MgDirectoryRole",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0063",
+      "kind": "Command",
+      "pattern": "Get-AzureADDirectoryRoleMember",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADDirectoryRoleMember is part of the retired AzureAD module.",
+      "replacement": "Get-MgDirectoryRoleMember",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "notes": "Only activated roles are returned by Get-MgDirectoryRole. For full role assignments (incl. PIM) use Get-MgRoleManagementDirectoryRoleAssignment.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0064",
+      "kind": "Command",
+      "pattern": "Add-AzureADDirectoryRoleMember",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Add-AzureADDirectoryRoleMember is part of the retired AzureAD module.",
+      "replacement": "New-MgDirectoryRoleMemberByRef",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0065",
+      "kind": "Command",
+      "pattern": "Remove-AzureADDirectoryRoleMember",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Remove-AzureADDirectoryRoleMember is part of the retired AzureAD module.",
+      "replacement": "Remove-MgDirectoryRoleMemberByRef",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0066",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSRoleAssignment",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSRoleAssignment is part of the retired AzureAD module.",
+      "replacement": "Get-MgRoleManagementDirectoryRoleAssignment",
+      "replacementModule": "Microsoft.Graph.Identity.Governance",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0067",
+      "kind": "Command",
+      "pattern": "New-AzureADMSRoleAssignment",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADMSRoleAssignment is part of the retired AzureAD module.",
+      "replacement": "New-MgRoleManagementDirectoryRoleAssignment",
+      "replacementModule": "Microsoft.Graph.Identity.Governance",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0068",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSRoleDefinition",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSRoleDefinition is part of the retired AzureAD module.",
+      "replacement": "Get-MgRoleManagementDirectoryRoleDefinition",
+      "replacementModule": "Microsoft.Graph.Identity.Governance",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0069",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSConditionalAccessPolicy",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSConditionalAccessPolicy is part of the retired AzureAD module.",
+      "replacement": "Get-MgIdentityConditionalAccessPolicy",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0070",
+      "kind": "Command",
+      "pattern": "New-AzureADMSConditionalAccessPolicy",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "New-AzureADMSConditionalAccessPolicy is part of the retired AzureAD module.",
+      "replacement": "New-MgIdentityConditionalAccessPolicy",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0071",
+      "kind": "Command",
+      "pattern": "Set-AzureADMSConditionalAccessPolicy",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADMSConditionalAccessPolicy is part of the retired AzureAD module.",
+      "replacement": "Update-MgIdentityConditionalAccessPolicy",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0072",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSNamedLocationPolicy",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSNamedLocationPolicy is part of the retired AzureAD module.",
+      "replacement": "Get-MgIdentityConditionalAccessNamedLocation",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0073",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSAuthorizationPolicy",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSAuthorizationPolicy is part of the retired AzureAD module.",
+      "replacement": "Get-MgPolicyAuthorizationPolicy",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0074",
+      "kind": "Command",
+      "pattern": "Set-AzureADMSAuthorizationPolicy",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Set-AzureADMSAuthorizationPolicy is part of the retired AzureAD module.",
+      "replacement": "Update-MgPolicyAuthorizationPolicy",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0075",
+      "kind": "Command",
+      "pattern": "Get-AzureADMSAdministrativeUnit",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADMSAdministrativeUnit is part of the retired AzureAD module.",
+      "replacement": "Get-MgDirectoryAdministrativeUnit",
+      "replacementModule": "Microsoft.Graph.Identity.DirectoryManagement",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell"
+      ]
+    },
+    {
+      "id": "AAD0076",
+      "kind": "Command",
+      "pattern": "Get-AzureADAuditSignInLogs",
+      "area": "AzureAD",
+      "module": "AzureADPreview",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADAuditSignInLogs is part of the retired AzureADPreview module.",
+      "replacement": "Get-MgAuditLogSignIn",
+      "replacementModule": "Microsoft.Graph.Reports",
+      "notes": "Get-MgAuditLogSignIn needs AuditLog.Read.All and an Entra ID P1/P2 license; filter server-side with -Filter (OData).",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-preview",
+        "https://techcommunity.microsoft.com/blog/microsoft-entra-blog/important-update-azuread-powershell-retirement/4364989"
+      ]
+    },
+    {
+      "id": "AAD0077",
+      "kind": "Command",
+      "pattern": "Get-AzureADAuditDirectoryLogs",
+      "area": "AzureAD",
+      "module": "AzureADPreview",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "Get-AzureADAuditDirectoryLogs is part of the retired AzureADPreview module.",
+      "replacement": "Get-MgAuditLogDirectoryAudit",
+      "replacementModule": "Microsoft.Graph.Reports",
+      "notes": "Get-MgAuditLogDirectoryAudit needs AuditLog.Read.All; filter server-side with -Filter (OData).",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-preview",
+        "https://techcommunity.microsoft.com/blog/microsoft-entra-blog/important-update-azuread-powershell-retirement/4364989"
+      ]
+    },
+    {
+      "id": "AAD0078",
+      "kind": "Command",
+      "pattern": "*-AzureAD*",
+      "area": "AzureAD",
+      "module": "AzureAD",
+      "status": "Retired",
+      "retirementDate": "2025-10",
+      "title": "This cmdlet belongs to the retired AzureAD / AzureADPreview modules.",
+      "replacement": "See the official cmdlet map for the Microsoft Graph PowerShell equivalent",
+      "replacementModule": "Microsoft.Graph",
+      "notes": "Bridge option: Microsoft Entra PowerShell (Connect-Entra + Enable-EntraAzureADAlias) runs most AzureAD cmdlet names unchanged while you migrate.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/microsoftgraph/azuread-msoline-cmdlet-map?view=graph-powershell-1.0&pivots=azure-ad-powershell",
+        "https://techcommunity.microsoft.com/blog/microsoft-entra-blog/important-update-azuread-powershell-retirement/4364989",
+        "https://learn.microsoft.com/en-us/powershell/entra-powershell/migration-guide?view=entra-powershell"
+      ]
+    },
+    {
+      "id": "EXO0001",
+      "kind": "Command",
+      "pattern": "Connect-EXOPSSession",
+      "area": "ExchangeOnline",
+      "module": "Exchange Online PowerShell V1 module",
+      "status": "Retired",
+      "retirementDate": "2023-10-01",
+      "title": "Connect-EXOPSSession comes from the old EXO V1 module, which relies on the retired Remote PowerShell protocol.",
+      "replacement": "Connect-ExchangeOnline",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Install the current ExchangeOnlineManagement module (v3+, REST-based). For unattended scripts use app-only auth (-AppId, -CertificateThumbprint, -Organization) or managed identity.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell-v2?view=exchange-ps",
+        "https://techcommunity.microsoft.com/blog/exchange/deprecation-of-remote-powershell-in-exchange-online-%e2%80%93-re-enabling-or-extending-r/3779692"
+      ]
+    },
+    {
+      "id": "EXO0002",
+      "kind": "Parameter",
+      "pattern": "UseRPSSession",
+      "command": "Connect-ExchangeOnline",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2023-10-01",
+      "title": "Connect-ExchangeOnline -UseRPSSession uses the retired Remote PowerShell (RPS) protocol.",
+      "replacement": "Connect-ExchangeOnline (without -UseRPSSession)",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "RPS was disabled for all Exchange Online tenants from October 1, 2023; the parameter is deprecated in module 3.9.2+. Remove the switch; REST mode needs no WinRM Basic auth. Parameters like -PSSessionOption only work with RPS.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/connect-exchangeonline?view=exchange-ps",
+        "https://techcommunity.microsoft.com/blog/exchange/deprecation-of-remote-powershell-in-exchange-online-%e2%80%93-re-enabling-or-extending-r/3779692"
+      ]
+    },
+    {
+      "id": "EXO0003",
+      "kind": "Parameter",
+      "pattern": "UseRPSSession",
+      "command": "Connect-IPPSSession",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2023-10",
+      "title": "Connect-IPPSSession -UseRPSSession uses the retired Remote PowerShell (RPS) protocol for Security & Compliance PowerShell.",
+      "replacement": "Connect-IPPSSession (without -UseRPSSession)",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Final RPS disablement for Security & Compliance PowerShell was October 2023; the parameter is deprecated in module 3.9.2+. Use module 3.2.0 or later in REST mode.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/connect-ippssession?view=exchange-ps",
+        "https://techcommunity.microsoft.com/blog/exchange/deprecation-of-remote-powershell-rps-protocol-in-security-and-compliance-powersh/3815432",
+        "https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell-v2?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0004",
+      "kind": "StringLiteral",
+      "pattern": "outlook\\.office365\\.com/powershell-liveid",
+      "area": "ExchangeOnline",
+      "status": "Retired",
+      "retirementDate": "2023-10-01",
+      "title": "Remote PowerShell connection URI for Exchange Online (New-PSSession) no longer works.",
+      "replacement": "Connect-ExchangeOnline",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ + Import-PSSession uses RPS, disabled since Oct 2023. Ignore this hit if the URI is only passed to Connect-ExchangeOnline -ConnectionUri (still valid there).",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/exchange/deprecation-of-remote-powershell-in-exchange-online-%e2%80%93-re-enabling-or-extending-r/3779692",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/connect-exchangeonline?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0005",
+      "kind": "Command",
+      "pattern": "Get-MessageTrace",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Deprecated",
+      "title": "Get-MessageTrace is replaced by Get-MessageTraceV2 and is being deprecated.",
+      "replacement": "Get-MessageTraceV2",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Deprecation of the old cmdlet began September 1, 2025 (worldwide). Get-MessageTraceV2 is throttled at 100 requests per 5 minutes per tenant.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/get-messagetrace?view=exchange-ps",
+        "https://techcommunity.microsoft.com/blog/exchange/announcing-general-availability-ga-of-the-new-message-trace-in-exchange-online/4420243",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/get-messagetracev2?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0006",
+      "kind": "Command",
+      "pattern": "Get-MessageTraceDetail",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Deprecated",
+      "title": "Get-MessageTraceDetail is replaced by Get-MessageTraceDetailV2 and is being deprecated.",
+      "replacement": "Get-MessageTraceDetailV2",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Deprecation of the old cmdlet began September 1, 2025 (worldwide). Get-MessageTraceDetailV2 is throttled at 100 requests per 5 minutes per tenant.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/exchange/announcing-general-availability-ga-of-the-new-message-trace-in-exchange-online/4420243",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/get-messagetracedetailv2?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0007",
+      "kind": "Command",
+      "pattern": "Search-AdminAuditLog",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2024-09-15",
+      "title": "Search-AdminAuditLog is retired in Exchange Online.",
+      "replacement": "Search-UnifiedAuditLog",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Applies to Exchange Online only; the cmdlet remains available in on-premises Exchange Server. Alternatively use the Microsoft Graph Audit Search API.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/search-adminauditlog?view=exchange-ps",
+        "https://techcommunity.microsoft.com/blog/microsoft-security-blog/update-on-the-deprecation-of-admin-audit-log-cmdlets/4172019",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/search-unifiedauditlog?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0008",
+      "kind": "Command",
+      "pattern": "New-AdminAuditLogSearch",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2024-09-15",
+      "title": "New-AdminAuditLogSearch is retired in Exchange Online.",
+      "replacement": "Search-UnifiedAuditLog",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Applies to Exchange Online only; the cmdlet remains available in on-premises Exchange Server. Alternatively use the Microsoft Graph Audit Search API.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/new-adminauditlogsearch?view=exchange-ps",
+        "https://techcommunity.microsoft.com/blog/microsoft-security-blog/update-on-the-deprecation-of-admin-audit-log-cmdlets/4172019",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/search-unifiedauditlog?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0009",
+      "kind": "Command",
+      "pattern": "Search-MailboxAuditLog",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "title": "Search-MailboxAuditLog is retired and removed from Exchange Online.",
+      "replacement": "Search-UnifiedAuditLog",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Microsoft confirmed full removal from Exchange Online in a February 18, 2026 update. Use Search-UnifiedAuditLog -RecordType ExchangeItem / ExchangeItemGroup. Still available in on-premises Exchange Server.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/microsoftsecurityandcompliance/-/4366310",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/search-mailboxauditlog?view=exchange-ps",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/search-unifiedauditlog?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0010",
+      "kind": "Command",
+      "pattern": "New-MailboxAuditLogSearch",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "title": "New-MailboxAuditLogSearch is retired and removed from Exchange Online.",
+      "replacement": "Search-UnifiedAuditLog",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Microsoft confirmed full removal from Exchange Online in a February 18, 2026 update. Still available in on-premises Exchange Server.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/microsoftsecurityandcompliance/-/4366310",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/new-mailboxauditlogsearch?view=exchange-ps",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/search-unifiedauditlog?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0011",
+      "kind": "Command",
+      "pattern": "Get-ClientAccessRule",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2025-09",
+      "title": "Get-ClientAccessRule manages Client Access Rules, which are fully deprecated in Exchange Online.",
+      "replacement": "Microsoft Entra Conditional Access with Continuous Access Evaluation (e.g. New-MgIdentityConditionalAccessPolicy)",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "notes": "Client Access Rules are no longer supported in any Exchange Online organization since September 2025. The cmdlet still works in Exchange Server 2019 or later on-premises.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules",
+        "https://techcommunity.microsoft.com/blog/exchange/update-on-client-access-rules-deprecation-in-exchange-online/4354809",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/get-clientaccessrule?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0012",
+      "kind": "Command",
+      "pattern": "New-ClientAccessRule",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2025-09",
+      "title": "New-ClientAccessRule manages Client Access Rules, which are fully deprecated in Exchange Online.",
+      "replacement": "Microsoft Entra Conditional Access with Continuous Access Evaluation (e.g. New-MgIdentityConditionalAccessPolicy)",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "notes": "Client Access Rules are no longer supported in any Exchange Online organization since September 2025. The cmdlet still works in Exchange Server 2019 or later on-premises.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules",
+        "https://techcommunity.microsoft.com/blog/exchange/update-on-client-access-rules-deprecation-in-exchange-online/4354809",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/new-clientaccessrule?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0013",
+      "kind": "Command",
+      "pattern": "Set-ClientAccessRule",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2025-09",
+      "title": "Set-ClientAccessRule manages Client Access Rules, which are fully deprecated in Exchange Online.",
+      "replacement": "Microsoft Entra Conditional Access with Continuous Access Evaluation (e.g. New-MgIdentityConditionalAccessPolicy)",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "notes": "Client Access Rules are no longer supported in any Exchange Online organization since September 2025. The cmdlet still works in Exchange Server 2019 or later on-premises.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules",
+        "https://techcommunity.microsoft.com/blog/exchange/update-on-client-access-rules-deprecation-in-exchange-online/4354809",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/set-clientaccessrule?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0014",
+      "kind": "Command",
+      "pattern": "Remove-ClientAccessRule",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2025-09",
+      "title": "Remove-ClientAccessRule manages Client Access Rules, which are fully deprecated in Exchange Online.",
+      "replacement": "Microsoft Entra Conditional Access with Continuous Access Evaluation (e.g. New-MgIdentityConditionalAccessPolicy)",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "notes": "Client Access Rules are no longer supported in any Exchange Online organization since September 2025. The cmdlet still works in Exchange Server 2019 or later on-premises.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules",
+        "https://techcommunity.microsoft.com/blog/exchange/update-on-client-access-rules-deprecation-in-exchange-online/4354809",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/remove-clientaccessrule?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0015",
+      "kind": "Command",
+      "pattern": "Test-ClientAccessRule",
+      "area": "ExchangeOnline",
+      "module": "ExchangeOnlineManagement",
+      "status": "Retired",
+      "retirementDate": "2025-09",
+      "title": "Test-ClientAccessRule manages Client Access Rules, which are fully deprecated in Exchange Online.",
+      "replacement": "Microsoft Entra Conditional Access with Continuous Access Evaluation (e.g. New-MgIdentityConditionalAccessPolicy)",
+      "replacementModule": "Microsoft.Graph.Identity.SignIns",
+      "notes": "Client Access Rules are no longer supported in any Exchange Online organization since September 2025. The cmdlet still works in Exchange Server 2019 or later on-premises.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules",
+        "https://techcommunity.microsoft.com/blog/exchange/update-on-client-access-rules-deprecation-in-exchange-online/4354809",
+        "https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/test-clientaccessrule?view=exchange-ps"
+      ]
+    },
+    {
+      "id": "EXO0016",
+      "kind": "StringLiteral",
+      "pattern": "reportingwebservice/reporting\\.svc/MessageTrace",
+      "area": "ExchangeOnline",
+      "status": "Deprecated",
+      "title": "Message trace via the legacy Reporting Web Service is deprecated.",
+      "replacement": "Get-MessageTraceV2 / Get-MessageTraceDetailV2 or the Microsoft Graph message trace API",
+      "replacementModule": "ExchangeOnlineManagement",
+      "notes": "Microsoft scheduled the deprecation of legacy Message Trace support in the Reporting Webservice for April 8, 2026 (worldwide). The new message trace is not available through the Reporting Webservice.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/exchange/announcing-general-availability-ga-of-the-new-message-trace-in-exchange-online/4420243"
+      ]
+    },
+    {
+      "id": "EXO0017",
+      "kind": "StringLiteral",
+      "pattern": "smtp\\.office365\\.com",
+      "area": "ExchangeOnline",
+      "status": "Announced",
+      "title": "SMTP AUTH client submission with Basic authentication to Exchange Online is being retired.",
+      "replacement": "Microsoft Graph sendMail (Send-MgUserMail) or SMTP AUTH with OAuth 2.0",
+      "replacementModule": "Microsoft.Graph.Users.Actions",
+      "notes": "Basic auth for SMTP AUTH is disabled by default for existing tenants at the end of December 2026 (admins can re-enable); the final removal date will be announced in H2 2027. OAuth (XOAUTH2) connections are not affected.",
+      "sources": [
+        "https://techcommunity.microsoft.com/blog/exchange/updated-exchange-online-smtp-auth-basic-authentication-deprecation-timeline/4489835",
+        "https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/deprecation-of-basic-authentication-exchange-online"
+      ]
+    },
+    {
+      "id": "AADG0001",
+      "kind": "StringLiteral",
+      "pattern": "graph\\.windows\\.net",
+      "area": "AzureADGraph",
+      "status": "Retired",
+      "retirementDate": "2025-08-31",
+      "title": "Azure AD Graph API (graph.windows.net) is retired.",
+      "replacement": "Microsoft Graph (https://graph.microsoft.com)",
+      "notes": "Extended access ended August 31, 2025; Azure AD Graph requests no longer work. Request tokens for https://graph.microsoft.com and map endpoints with the Azure AD Graph to Microsoft Graph migration guidance; permissions differ.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/graph/migrate-azure-ad-graph-overview",
+        "https://techcommunity.microsoft.com/blog/identity/action-required-azure-ad-graph-api-retirement/4090533"
+      ]
+    },
+    {
+      "id": "AZ0001",
+      "kind": "Module",
+      "pattern": "AzureRM",
+      "area": "Azure",
+      "module": "AzureRM",
+      "status": "Deprecated",
+      "retirementDate": "2024-02-29",
+      "title": "The AzureRM module is retired and no longer supported.",
+      "replacement": "Az PowerShell module",
+      "replacementModule": "Az",
+      "notes": "AzureRM was retired on February 29, 2024; it may still run but gets no fixes or support. Az cmdlets use the Az prefix (Get-AzureRmVM -> Get-AzVM). Enable-AzureRmAlias offers temporary compatibility aliases; parameters and outputs can differ.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/azure/azurerm-retirement-overview",
+        "https://learn.microsoft.com/en-us/powershell/azure/migrate-from-azurerm-to-az"
+      ]
+    },
+    {
+      "id": "AZ0002",
+      "kind": "Module",
+      "pattern": "AzureRM.*",
+      "area": "Azure",
+      "module": "AzureRM",
+      "status": "Deprecated",
+      "retirementDate": "2024-02-29",
+      "title": "AzureRM.* sub-modules are retired and no longer supported.",
+      "replacement": "Corresponding Az.* module (e.g. AzureRM.Compute -> Az.Compute, AzureRM.Profile -> Az.Accounts)",
+      "replacementModule": "Az",
+      "notes": "Some modules were renamed or merged (AzureRM.Profile -> Az.Accounts, AzureRM.Insights -> Az.Monitor). Do not install AzureRM and Az side by side in the same PowerShell edition.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/azure/azurerm-retirement-overview",
+        "https://learn.microsoft.com/en-us/powershell/azure/migrate-from-azurerm-to-az"
+      ]
+    },
+    {
+      "id": "AZ0003",
+      "kind": "Command",
+      "pattern": "Connect-AzureRmAccount",
+      "area": "Azure",
+      "module": "AzureRM.Profile",
+      "status": "Deprecated",
+      "retirementDate": "2024-02-29",
+      "title": "Connect-AzureRmAccount is part of the retired AzureRM module.",
+      "replacement": "Connect-AzAccount",
+      "replacementModule": "Az.Accounts",
+      "notes": "Connect-AzAccount supports interactive, device code, service principal (certificate/secret), managed identity and federated token sign-in.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/azure/azurerm-retirement-overview",
+        "https://learn.microsoft.com/en-us/powershell/module/az.accounts/connect-azaccount"
+      ]
+    },
+    {
+      "id": "AZ0004",
+      "kind": "Command",
+      "pattern": "Login-AzureRmAccount",
+      "area": "Azure",
+      "module": "AzureRM.Profile",
+      "status": "Deprecated",
+      "retirementDate": "2024-02-29",
+      "title": "Login-AzureRmAccount is part of the retired AzureRM module.",
+      "replacement": "Connect-AzAccount",
+      "replacementModule": "Az.Accounts",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/azure/azurerm-retirement-overview",
+        "https://learn.microsoft.com/en-us/powershell/module/az.accounts/connect-azaccount"
+      ]
+    },
+    {
+      "id": "AZ0006",
+      "kind": "Command",
+      "pattern": "*-AzureRm*",
+      "exclude": [
+        "Enable-AzureRmAlias",
+        "Disable-AzureRmAlias",
+        "Uninstall-AzureRm"
+      ],
+      "area": "Azure",
+      "module": "AzureRM",
+      "status": "Deprecated",
+      "retirementDate": "2024-02-29",
+      "title": "This cmdlet belongs to the retired AzureRM module.",
+      "replacement": "Equivalent Az cmdlet (replace the AzureRm noun prefix with Az, e.g. Get-AzureRmVM -> Get-AzVM)",
+      "replacementModule": "Az",
+      "notes": "Enable-AzureRmAlias, Disable-AzureRmAlias and Uninstall-AzureRm are Az.Accounts migration cmdlets and are excluded. Check the Az 1.0.0 migration guide for renamed cmdlets and parameters.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/azure/azurerm-retirement-overview",
+        "https://learn.microsoft.com/en-us/powershell/azure/migrate-from-azurerm-to-az"
+      ]
+    },
+    {
+      "id": "MGSDK0001",
+      "kind": "Command",
+      "pattern": "Select-MgProfile",
+      "area": "MicrosoftGraph",
+      "module": "Microsoft.Graph (v1.x)",
+      "status": "Retired",
+      "title": "Select-MgProfile was removed in Microsoft Graph PowerShell SDK v2.",
+      "replacement": "Nothing for v1.0 (just delete the line). For beta: the Microsoft.Graph.Beta module and its *-MgBeta* cmdlets (e.g. Get-MgBetaUser)",
+      "replacementModule": "Microsoft.Graph.Beta",
+      "notes": "v2 ships separate v1.0 (Microsoft.Graph) and beta (Microsoft.Graph.Beta) modules that can be used side by side. Select-MgProfile v1.0 lines can simply be deleted.",
+      "sources": [
+        "https://devblogs.microsoft.com/microsoft365dev/upgrade-to-microsoft-graph-powershell-sdk-v2-now-generally-available/",
+        "https://github.com/microsoftgraph/msgraph-sdk-powershell/releases/tag/2.0.0-preview1"
+      ]
+    },
+    {
+      "id": "MGSDK0002",
+      "kind": "Parameter",
+      "pattern": "ForceRefresh",
+      "command": "Connect-MgGraph",
+      "area": "MicrosoftGraph",
+      "module": "Microsoft.Graph.Authentication",
+      "status": "Retired",
+      "title": "Connect-MgGraph -ForceRefresh is no longer supported in Microsoft Graph PowerShell SDK v2.",
+      "replacement": "Disconnect-MgGraph, then Connect-MgGraph",
+      "replacementModule": "Microsoft.Graph.Authentication",
+      "notes": "In v2 -AccessToken also changed from String to SecureString; convert plain-text tokens with ConvertTo-SecureString.",
+      "sources": [
+        "https://devblogs.microsoft.com/microsoft365dev/upgrade-to-microsoft-graph-powershell-sdk-v2-now-generally-available/",
+        "https://github.com/microsoftgraph/msgraph-sdk-powershell/releases/tag/2.0.0-preview1"
+      ]
+    },
+    {
+      "id": "TEAMS0001",
+      "kind": "Module",
+      "pattern": "SkypeOnlineConnector",
+      "area": "Teams",
+      "module": "SkypeOnlineConnector",
+      "status": "Retired",
+      "title": "The Skype for Business Online Connector module is retired.",
+      "replacement": "MicrosoftTeams module",
+      "replacementModule": "MicrosoftTeams",
+      "notes": "Change Import-Module SkypeOnlineConnector to Import-Module MicrosoftTeams and connect with Connect-MicrosoftTeams. Import-PSSession is no longer needed.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-move-from-sfbo",
+        "https://learn.microsoft.com/en-us/skypeforbusiness/hybrid/configure-federation-with-skype-for-business-online"
+      ]
+    },
+    {
+      "id": "TEAMS0002",
+      "kind": "Module",
+      "pattern": "LyncOnlineConnector",
+      "area": "Teams",
+      "module": "LyncOnlineConnector",
+      "status": "Retired",
+      "title": "The LyncOnlineConnector module (Skype for Business Online Connector) is retired.",
+      "replacement": "MicrosoftTeams module",
+      "replacementModule": "MicrosoftTeams",
+      "notes": "Change Import-Module LyncOnlineConnector to Import-Module MicrosoftTeams and connect with Connect-MicrosoftTeams.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-move-from-sfbo"
+      ]
+    },
+    {
+      "id": "TEAMS0003",
+      "kind": "Command",
+      "pattern": "New-CsOnlineSession",
+      "area": "Teams",
+      "module": "SkypeOnlineConnector",
+      "status": "Retired",
+      "title": "New-CsOnlineSession belongs to the retired Skype for Business Online Connector.",
+      "replacement": "Connect-MicrosoftTeams",
+      "replacementModule": "MicrosoftTeams",
+      "notes": "With MicrosoftTeams 2.0 or later, replace New-CsOnlineSession + Import-PSSession with Connect-MicrosoftTeams; Cs* cmdlets are then available directly.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-move-from-sfbo",
+        "https://learn.microsoft.com/en-us/powershell/module/microsoftteams/connect-microsoftteams"
+      ]
+    },
+    {
+      "id": "SPO0001",
+      "kind": "Module",
+      "pattern": "SharePointPnPPowerShellOnline",
+      "area": "SharePoint",
+      "module": "SharePointPnPPowerShellOnline",
+      "status": "Deprecated",
+      "title": "The legacy SharePointPnPPowerShellOnline module is no longer maintained.",
+      "replacement": "PnP.PowerShell",
+      "replacementModule": "PnP.PowerShell",
+      "notes": "PnP.PowerShell supports SharePoint Online only (not SharePoint Server). It is an open-source community module without Microsoft SLA. Uninstall the legacy module first; several cmdlets and parameters changed.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/microsoft-365/community/benefits-of-using-powershell-with-sharepoint",
+        "https://learn.microsoft.com/en-us/powershell/sharepoint/sharepoint-pnp/sharepoint-pnp-cmdlets"
+      ]
+    },
+    {
+      "id": "SPO0002",
+      "kind": "Parameter",
+      "pattern": "ClientSecret",
+      "command": "Connect-PnPOnline",
+      "area": "SharePoint",
+      "module": "PnP.PowerShell",
+      "status": "Retired",
+      "retirementDate": "2026-04-02",
+      "title": "Connect-PnPOnline -ClientId/-ClientSecret uses SharePoint Azure ACS app-only, which is retired in SharePoint Online.",
+      "replacement": "Entra ID app registration with certificate (Connect-PnPOnline -ClientId -Tenant -Thumbprint)",
+      "replacementModule": "PnP.PowerShell",
+      "notes": "Azure ACS stopped working for existing SharePoint Online tenants on April 2, 2026 (new tenants since Nov 1, 2024). Apps created via appregnew.aspx/appinv.aspx must move to Entra ID apps. ACS app-only still works on SharePoint Server on-premises.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/retirement-announcement-for-azure-acs",
+        "https://learn.microsoft.com/en-us/sharepoint/dev/solution-guidance/security-apponly-azureacs"
+      ]
+    },
+    {
+      "id": "OTHER0001",
+      "kind": "Command",
+      "pattern": "Send-MailMessage",
+      "area": "Other",
+      "module": "Microsoft.PowerShell.Utility",
+      "status": "Deprecated",
+      "title": "Send-MailMessage is obsolete and does not guarantee secure SMTP connections.",
+      "replacement": "Send-MgUserMail (Exchange Online) or a maintained SMTP library such as MailKit",
+      "replacementModule": "Microsoft.Graph.Users.Actions",
+      "notes": "Send-MgUserMail needs Mail.Send. Send-MailMessage has no OAuth support, so against smtp.office365.com it depends on SMTP AUTH Basic authentication, which is being retired.",
+      "sources": [
+        "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/send-mailmessage",
+        "https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users.actions/send-mgusermail"
+      ]
+    }
+  ]
+}

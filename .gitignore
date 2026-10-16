@@ -1,0 +1,22 @@
+# Test and report output
+test-results.xml
+*.sarif
+m365-deprecation*.html
+report.html
+
+# Editors / OS
+.vs/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Never commit secrets or build output
+.env*
+*.pfx
+*.pem
+*.key
+*.nupkg
+out/
+*.csv
+

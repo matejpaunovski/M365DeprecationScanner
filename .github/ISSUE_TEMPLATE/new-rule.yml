@@ -1,0 +1,48 @@
+name: New or wrong rule
+description: Report a deprecated command that is missing, or a rule that is wrong.
+title: '[Rule] '
+labels: [rule]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping keep the rule database accurate! Every rule needs an **official Microsoft source**.
+  - type: dropdown
+    id: type
+    attributes:
+      label: What is it about?
+      options:
+        - A deprecated / retired command, parameter, module or endpoint is missing
+        - An existing rule is wrong (false positive, wrong replacement, wrong date)
+    validations:
+      required: true
+  - type: input
+    id: item
+    attributes:
+      label: Command, parameter, module or endpoint
+      placeholder: e.g. Get-MsolUser, Connect-ExchangeOnline -UseRPSSession, https://graph.windows.net
+    validations:
+      required: true
+  - type: input
+    id: rule-id
+    attributes:
+      label: Existing rule id (if the rule is wrong)
+      placeholder: e.g. MSOL0012
+  - type: input
+    id: replacement
+    attributes:
+      label: What should be used instead?
+      placeholder: e.g. Get-MgUser (Microsoft.Graph.Users)
+  - type: input
+    id: source
+    attributes:
+      label: Official source
+      description: Link to Microsoft Learn, the Microsoft Tech Community blog or the Microsoft 365 message center (MC id).
+      placeholder: https://learn.microsoft.com/...
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Retirement date, migration hints, example code ...

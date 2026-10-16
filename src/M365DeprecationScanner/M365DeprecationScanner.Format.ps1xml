@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <Name>M365DeprecationScanner.Finding</Name>
+      <ViewSelectedBy>
+        <TypeName>M365DeprecationScanner.Finding</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader><Label>File</Label><Width>28</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Line</Label><Width>5</Width><Alignment>Right</Alignment></TableColumnHeader>
+          <TableColumnHeader><Label>Severity</Label><Width>11</Width></TableColumnHeader>
+          <TableColumnHeader><Label>RuleId</Label><Width>10</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Found</Label><Width>30</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Use instead</Label></TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem><ScriptBlock>if ($_.Path) { Split-Path -Path $_.Path -Leaf } else { '&lt;script&gt;' }</ScriptBlock></TableColumnItem>
+              <TableColumnItem><PropertyName>Line</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Severity</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>RuleId</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Match</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Replacement</PropertyName></TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+    <View>
+      <Name>M365DeprecationScanner.Rule</Name>
+      <ViewSelectedBy>
+        <TypeName>M365DeprecationScanner.Rule</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader><Label>Id</Label><Width>11</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Kind</Label><Width>13</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Status</Label><Width>10</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Pattern</Label><Width>34</Width></TableColumnHeader>
+          <TableColumnHeader><Label>Replacement</Label></TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem><PropertyName>Id</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Kind</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Status</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Pattern</PropertyName></TableColumnItem>
+              <TableColumnItem><PropertyName>Replacement</PropertyName></TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>

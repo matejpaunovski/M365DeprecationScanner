@@ -1,0 +1,41 @@
+name: Bug report
+description: The scanner crashes, misses something it should find, or reports the wrong line.
+title: '[Bug] '
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Minimal script to reproduce
+      description: Please remove tenant names, passwords and other secrets.
+      render: powershell
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command you ran
+      placeholder: Invoke-M365DeprecationScan -Path .\script.ps1
+  - type: input
+    id: version
+    attributes:
+      label: Versions
+      description: Output of `(Get-Module M365DeprecationScanner).Version` and `$PSVersionTable.PSVersion`
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where do you use it?
+      multiple: true
+      options:
+        - PowerShell command
+        - VS Code / PSScriptAnalyzer
+        - GitHub Action

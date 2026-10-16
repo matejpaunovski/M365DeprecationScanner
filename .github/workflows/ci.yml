@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test (PowerShell 7, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install tools
+        shell: pwsh
+        run: ./build.ps1 -Task Bootstrap
+
+      - name: Analyze, check docs, test
+        shell: pwsh
+        run: ./build.ps1 -Task All -TestResultPath ./test-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}
+          path: test-results.xml
+
+  test-windows-powershell:
+    name: Test (Windows PowerShell 5.1)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Pester 5
+        shell: powershell
+        run: |
+          Install-Module Pester -MinimumVersion 5.5.0 -MaximumVersion 5.99.99 -Scope CurrentUser -Force -SkipPublisherCheck
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+
+      - name: Run tests
+        shell: powershell
+        run: |
+          Import-Module Pester -MinimumVersion 5.5.0
+          $config = New-PesterConfiguration
+          $config.Run.Path = './tests'
+          $config.Run.Exit = $true
+          $config.Output.Verbosity = 'Detailed'
+          Invoke-Pester -Configuration $config
+
+  action:
+    name: Action smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Run the action against the legacy example
+        id: scan
+        uses: ./
+        with:
+          path: examples/legacy-script.ps1
+          fail-on: None
+          sarif-file: results.sarif
+          html-file: report.html
+
+      - name: Verify outputs
+        shell: pwsh
+        env:
+          FINDINGS: ${{ steps.scan.outputs.findings }}
+          ERRORS: ${{ steps.scan.outputs.errors }}
+        run: |
+          if ([int]$env:FINDINGS -lt 5) { throw "Expected findings in the legacy example, got $env:FINDINGS." }
+          if ([int]$env:ERRORS -lt 1) { throw "Expected at least one retired finding, got $env:ERRORS." }
+          if (-not (Test-Path results.sarif)) { throw 'SARIF file missing.' }
+          if (-not (Test-Path report.html)) { throw 'HTML file missing.' }
+          Write-Host "OK: $env:FINDINGS findings."
+
+      - name: Modern example must be clean
+        uses: ./
+        with:
+          path: examples/modern-script.ps1
+          fail-on: Information
+          sarif-file: ''

@@ -1,0 +1,85 @@
+name: 'M365 Deprecation Scanner'
+description: 'Find retired and deprecated Microsoft 365, Entra ID and Azure PowerShell commands (MSOnline, AzureAD, Exchange RPS, AzureRM, ...) in your scripts.'
+author: 'Matej'
+branding:
+  icon: 'alert-triangle'
+  color: 'orange'
+
+inputs:
+  path:
+    description: 'Files or folders to scan, separated by new lines or commas. Folders are scanned recursively.'
+    required: false
+    default: '.'
+  include:
+    description: 'File name patterns to scan inside folders, separated by commas.'
+    required: false
+    default: '*.ps1,*.psm1'
+  exclude:
+    description: 'Wildcard patterns matched against the full file path to skip, separated by commas. Example: */tests/*'
+    required: false
+    default: ''
+  minimum-severity:
+    description: 'Report findings with at least this severity: Information, Warning or Error.'
+    required: false
+    default: 'Information'
+  fail-on:
+    description: 'Fail the step when a finding with at least this severity exists: Error, Warning, Information or None.'
+    required: false
+    default: 'Error'
+  exclude-rule-ids:
+    description: 'Rule ids to ignore, separated by commas.'
+    required: false
+    default: ''
+  custom-rule-path:
+    description: 'Additional rule database files (JSON), separated by commas.'
+    required: false
+    default: ''
+  sarif-file:
+    description: 'Where to write the SARIF report (for github/codeql-action/upload-sarif). Leave empty to skip.'
+    required: false
+    default: 'm365-deprecations.sarif'
+  html-file:
+    description: 'Where to write the HTML report (for actions/upload-artifact). Leave empty to skip.'
+    required: false
+    default: ''
+  job-summary:
+    description: 'Write a Markdown summary to the job summary page: true or false.'
+    required: false
+    default: 'true'
+  annotations:
+    description: 'Show findings as annotations on the changed files: true or false.'
+    required: false
+    default: 'true'
+
+outputs:
+  findings:
+    description: 'Total number of findings.'
+    value: ${{ steps.scan.outputs.findings }}
+  errors:
+    description: 'Number of findings for retired items (severity Error).'
+    value: ${{ steps.scan.outputs.errors }}
+  warnings:
+    description: 'Number of findings for deprecated items (severity Warning).'
+    value: ${{ steps.scan.outputs.warnings }}
+  sarif-file:
+    description: 'Path of the SARIF report, if written.'
+    value: ${{ steps.scan.outputs.sarif-file }}
+
+runs:
+  using: 'composite'
+  steps:
+    - id: scan
+      shell: pwsh
+      env:
+        M365DS_PATH: ${{ inputs.path }}
+        M365DS_INCLUDE: ${{ inputs.include }}
+        M365DS_EXCLUDE: ${{ inputs.exclude }}
+        M365DS_MINIMUM_SEVERITY: ${{ inputs.minimum-severity }}
+        M365DS_FAIL_ON: ${{ inputs.fail-on }}
+        M365DS_EXCLUDE_RULE_IDS: ${{ inputs.exclude-rule-ids }}
+        M365DS_CUSTOM_RULE_PATH: ${{ inputs.custom-rule-path }}
+        M365DS_SARIF_FILE: ${{ inputs.sarif-file }}
+        M365DS_HTML_FILE: ${{ inputs.html-file }}
+        M365DS_JOB_SUMMARY: ${{ inputs.job-summary }}
+        M365DS_ANNOTATIONS: ${{ inputs.annotations }}
+      run: '& "$env:GITHUB_ACTION_PATH/action/Invoke-Action.ps1"'

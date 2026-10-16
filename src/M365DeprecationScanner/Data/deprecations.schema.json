@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/matejpaunovski/M365DeprecationScanner/blob/main/src/M365DeprecationScanner/Data/deprecations.schema.json",
+  "title": "M365DeprecationScanner rule database",
+  "description": "List of deprecated or retired Microsoft 365 / Entra / Azure PowerShell commands, parameters, modules and endpoints.",
+  "type": "object",
+  "required": ["schemaVersion", "lastUpdated", "rules"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "lastUpdated": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/rule" }
+    }
+  },
+  "definitions": {
+    "rule": {
+      "type": "object",
+      "required": ["id", "kind", "pattern", "area", "status", "title", "replacement", "sources"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Stable, unique rule id. Prefix by area, e.g. MSOL0001. Never reuse or renumber an id.",
+          "type": "string",
+          "pattern": "^[A-Z]{2,8}\\d{4}$"
+        },
+        "kind": {
+          "description": "Command = a cmdlet/function name. Parameter = a parameter on a specific command. Module = Import-Module / Install-Module / #Requires -Modules. StringLiteral = a regex matched against string literals (URLs, endpoints).",
+          "type": "string",
+          "enum": ["Command", "Parameter", "Module", "StringLiteral"]
+        },
+        "pattern": {
+          "description": "Command/Parameter/Module: name, may contain * and ? wildcards (case-insensitive). StringLiteral: a .NET regular expression (case-insensitive).",
+          "type": "string",
+          "minLength": 1
+        },
+        "exclude": {
+          "description": "Command/Module rules only: names (wildcards allowed) the pattern must NOT match, e.g. valid cmdlets caught by a broad catch-all.",
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "command": {
+          "description": "Required when kind = Parameter: the command (wildcards allowed) the parameter belongs to.",
+          "type": "string"
+        },
+        "area": {
+          "description": "Product area, used for grouping in reports.",
+          "type": "string",
+          "enum": ["MSOnline", "AzureAD", "ExchangeOnline", "MicrosoftGraph", "AzureADGraph", "Azure", "Teams", "SharePoint", "Intune", "Other"]
+        },
+        "module": {
+          "description": "The legacy module the matched item comes from.",
+          "type": "string"
+        },
+        "status": {
+          "description": "Retired = no longer works. Deprecated = still works but end of support/retirement announced or passed. Announced = retirement announced for the future.",
+          "type": "string",
+          "enum": ["Retired", "Deprecated", "Announced"]
+        },
+        "retirementDate": {
+          "description": "Date the item stops/stopped working (YYYY-MM-DD or YYYY-MM). Omit if unknown.",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$"
+        },
+        "title": {
+          "description": "One short sentence describing the problem.",
+          "type": "string",
+          "minLength": 5
+        },
+        "replacement": {
+          "description": "What to use instead (command, module or approach).",
+          "type": "string",
+          "minLength": 1
+        },
+        "replacementModule": {
+          "type": "string"
+        },
+        "notes": {
+          "description": "Migration hints: parameter differences, permission scopes, output object changes.",
+          "type": "string"
+        },
+        "sources": {
+          "description": "Official URLs backing this rule. Prefer learn.microsoft.com / techcommunity.microsoft.com.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^https://" }
+        }
+      },
+      "if": { "properties": { "kind": { "const": "Parameter" } } },
+      "then": { "required": ["command"] }
+    }
+  }
+}

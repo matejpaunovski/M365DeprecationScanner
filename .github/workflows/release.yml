@@ -1,0 +1,64 @@
+name: Release
+
+# Publishes the module to the PowerShell Gallery when a version tag (v1.2.3) is pushed.
+#
+# Setup (once):
+#   1. Repository secret PSGALLERY_API_KEY (https://www.powershellgallery.com/account/apikeys)
+#   2. Environment "release" with required reviewers (Settings > Environments)
+#
+# The jobs are split by privilege: tests run third-party tools (Pester, PSScriptAnalyzer) with a
+# read-only token; publishing runs no third-party code and is the only job that sees the API key.
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Check that the tag matches the module version
+        shell: pwsh
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          $manifest = Import-PowerShellDataFile ./src/M365DeprecationScanner/M365DeprecationScanner.psd1
+          $tag = $env:TAG.TrimStart('v')
+          if ($manifest.ModuleVersion -ne $tag) { throw "Tag v$tag does not match ModuleVersion $($manifest.ModuleVersion)." }
+
+      - name: Test
+        shell: pwsh
+        run: |
+          ./build.ps1 -Task Bootstrap
+          ./build.ps1 -Task All
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Publish to PowerShell Gallery
+        shell: pwsh
+        env:
+          PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
+        run: Publish-PSResource -Path ./src/M365DeprecationScanner -ApiKey $env:PSGALLERY_API_KEY -Repository PSGallery
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" --title "$TAG" --generate-notes
