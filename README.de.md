@@ -28,7 +28,7 @@ Der Scanner versteht PowerShell, er macht kein einfaches Textsuchen. Er erkennt:
 
 - **Befehle**, auch mit Modulpräfix (`MSOnline\Get-MsolUser`) und in Funktionen oder Pipelines
 - **Parameter** an bestimmten Befehlen (`Connect-ExchangeOnline -UseRPSSession`)
-- **Module** in `Import-Module`, `Install-Module`, `#Requires -Modules` und `using module`
+- **Module** in `Import-Module`, `Install-Module`, `#Requires -Modules`, `using module` und in Modul-Manifesten (`RequiredModules` / `NestedModules` in `.psd1`-Dateien)
 - **Endpunkte** in Strings (`'https://graph.windows.net/...'`)
 
 Kommentare werden ignoriert. Alle Regeln findest du im [Regelkatalog](docs/rules.md).

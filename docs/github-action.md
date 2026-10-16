@@ -96,7 +96,7 @@ All inputs are optional. Lists are separated by commas (for `path` also by new l
 | Input | Default | Description |
 |---|---|---|
 | `path` | `.` | Files or folders to scan. Folders are always scanned recursively. Relative paths start at the repository root. |
-| `include` | `*.ps1,*.psm1` | File name patterns to scan inside folders. |
+| `include` | `*.ps1,*.psm1,*.psd1` | File name patterns to scan inside folders. |
 | `exclude` | (empty) | Wildcard patterns matched against the full file path. Example: `*/tests/*` |
 | `minimum-severity` | `Information` | Report findings with at least this severity: `Information`, `Warning` or `Error`. |
 | `fail-on` | `Error` | Fail the step when a finding with at least this severity exists: `Error`, `Warning`, `Information` or `None`. |

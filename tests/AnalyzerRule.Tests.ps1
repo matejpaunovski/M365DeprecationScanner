@@ -30,6 +30,13 @@ Describe 'PSScriptAnalyzer custom rule' -Skip:(-not $script:HasAnalyzer) {
         }
     }
 
+    It 'finds retired modules in a module manifest (.psd1)' {
+        $manifest = Join-Path (Split-Path $PSScriptRoot -Parent) 'examples/legacy-module/Contoso.LegacyTools.psd1'
+        $records = @(Invoke-ScriptAnalyzer -Path $manifest -CustomRulePath $script:RulePath)
+        $records.Count | Should -Be @(Invoke-M365DeprecationScan -Path $manifest).Count
+        $records.Count | Should -BeGreaterOrEqual 3
+    }
+
     It 'can be suppressed with SuppressMessageAttribute' {
         $first = $script:Findings | Where-Object Kind -EQ 'Command' | Select-Object -First 1
         $code = @"

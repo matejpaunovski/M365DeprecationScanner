@@ -72,22 +72,27 @@ function Find-DeprecationInAstUnsorted {
         'Import-Module', 'Install-Module', 'Update-Module', 'Save-Module',
         'Install-PSResource', 'Update-PSResource', 'Save-PSResource'
     )
+    # Commands that write module dependencies into a manifest.
+    $manifestCommands = @('New-ModuleManifest', 'Update-ModuleManifest')
 
     # Walk the syntax tree once and sort the interesting nodes by type. The predicate runs for every
     # node, so a single pass is much faster than one FindAll per node type on large scripts.
     $commandAsts = New-Object System.Collections.Generic.List[object]
     $usingAsts = New-Object System.Collections.Generic.List[object]
     $stringAsts = New-Object System.Collections.Generic.List[object]
+    $hashtableAsts = New-Object System.Collections.Generic.List[object]
     $nodes = $Ast.FindAll({
             param($node)
             $node -is [System.Management.Automation.Language.CommandAst] -or
             $node -is [System.Management.Automation.Language.StringConstantExpressionAst] -or
             $node -is [System.Management.Automation.Language.ExpandableStringExpressionAst] -or
-            $node -is [System.Management.Automation.Language.UsingStatementAst]
+            $node -is [System.Management.Automation.Language.UsingStatementAst] -or
+            $node -is [System.Management.Automation.Language.HashtableAst]
         }, $true)
     foreach ($node in $nodes) {
         if ($node -is [System.Management.Automation.Language.CommandAst]) { $commandAsts.Add($node) }
         elseif ($node -is [System.Management.Automation.Language.UsingStatementAst]) { $usingAsts.Add($node) }
+        elseif ($node -is [System.Management.Automation.Language.HashtableAst]) { $hashtableAsts.Add($node) }
         else { $stringAsts.Add($node) }
     }
 
@@ -142,6 +147,27 @@ function Find-DeprecationInAstUnsorted {
                 }
             }
         }
+
+        # New-ModuleManifest -RequiredModules 'AzureAD' writes the dependency into a manifest.
+        if ($moduleIndex.Count -gt 0 -and $manifestCommands -contains $bareName) {
+            $elements = $commandAst.CommandElements
+            for ($i = 1; $i -lt $elements.Count; $i++) {
+                $parameterAst = $elements[$i]
+                if ($parameterAst -isnot [System.Management.Automation.Language.CommandParameterAst] -or
+                    $parameterAst.ParameterName -notin 'RequiredModules', 'NestedModules') {
+                    continue
+                }
+                $value = $parameterAst.Argument
+                if (-not $value -and $i + 1 -lt $elements.Count) { $value = $elements[$i + 1] }
+                if (-not $value) { continue }
+                foreach ($module in Get-ModuleSpecificationName -Ast $value) {
+                    $rule = Select-MatchingRule -Index $moduleIndex -Name $module.Name
+                    if ($rule) {
+                        & $emit $rule $module.Extent ('{0} -{1} {2}' -f $bareName, $parameterAst.ParameterName, $module.Name)
+                    }
+                }
+            }
+        }
     }
 
     if ($moduleIndex.Count -gt 0) {
@@ -153,6 +179,27 @@ function Find-DeprecationInAstUnsorted {
             $rule = Select-MatchingRule -Index $moduleIndex -Name $usingAst.Name.Value
             if ($rule) {
                 & $emit $rule $usingAst.Extent ('using module {0}' -f $usingAst.Name.Value)
+            }
+        }
+
+        # --- Module manifests (.psd1): RequiredModules / NestedModules -----------------------
+        # A manifest is a hashtable at the top level of the file. Hashtables assigned to variables
+        # or passed to commands are ordinary data and are not treated as manifests.
+        foreach ($hashtableAst in $hashtableAsts) {
+            if (-not (Test-TopLevelHashtable -Ast $hashtableAst)) {
+                continue
+            }
+            foreach ($pair in $hashtableAst.KeyValuePairs) {
+                $key = $pair.Item1 -as [System.Management.Automation.Language.StringConstantExpressionAst]
+                if (-not $key -or $key.Value -notin 'RequiredModules', 'NestedModules') {
+                    continue
+                }
+                foreach ($module in Get-ModuleSpecificationName -Ast $pair.Item2) {
+                    $rule = Select-MatchingRule -Index $moduleIndex -Name $module.Name
+                    if ($rule) {
+                        & $emit $rule $module.Extent ('{0} {1}' -f $key.Value, $module.Name)
+                    }
+                }
             }
         }
 
@@ -341,4 +388,61 @@ function Test-InsideExpandableString {
         }
     }
     return $false
+}
+
+
+function Get-ModuleSpecificationName {
+    <#
+    .SYNOPSIS
+        Returns module names from a module specification list, as used in manifests.
+    .DESCRIPTION
+        Accepts what RequiredModules / NestedModules allow: 'Name', @('A', 'B') and
+        @{ ModuleName = 'Name'; ModuleVersion = '1.0' }. Only literal names are returned.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [System.Management.Automation.Language.Ast]$Ast
+    )
+
+    foreach ($element in Get-LiteralElement -Ast $Ast) {
+        if ($element -is [System.Management.Automation.Language.StringConstantExpressionAst] -and $element.Value) {
+            [pscustomobject]@{ Name = $element.Value; Extent = $element.Extent }
+        }
+        elseif ($element -is [System.Management.Automation.Language.HashtableAst]) {
+            foreach ($pair in $element.KeyValuePairs) {
+                $key = $pair.Item1 -as [System.Management.Automation.Language.StringConstantExpressionAst]
+                if (-not $key -or $key.Value -ne 'ModuleName') {
+                    continue
+                }
+                foreach ($value in Get-LiteralElement -Ast $pair.Item2) {
+                    if ($value -is [System.Management.Automation.Language.StringConstantExpressionAst] -and $value.Value) {
+                        [pscustomobject]@{ Name = $value.Value; Extent = $value.Extent }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function Test-TopLevelHashtable {
+    <#
+    .SYNOPSIS
+        True when a hashtable is a statement of its own at the top level of the file (manifest shape).
+    #>
+    [CmdletBinding()]
+    [OutputType([bool])]
+    param(
+        [Parameter(Mandatory)]
+        [System.Management.Automation.Language.HashtableAst]$Ast
+    )
+
+    $expression = $Ast.Parent -as [System.Management.Automation.Language.CommandExpressionAst]
+    if (-not $expression) { return $false }
+    $pipeline = $expression.Parent -as [System.Management.Automation.Language.PipelineAst]
+    if (-not $pipeline -or $pipeline.PipelineElements.Count -ne 1) { return $false }
+    $namedBlock = $pipeline.Parent -as [System.Management.Automation.Language.NamedBlockAst]
+    if (-not $namedBlock) { return $false }
+    $scriptBlock = $namedBlock.Parent -as [System.Management.Automation.Language.ScriptBlockAst]
+    return ($null -ne $scriptBlock -and $null -eq $scriptBlock.Parent)
 }

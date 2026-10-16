@@ -4,8 +4,8 @@ function Invoke-M365DeprecationScan {
         Scans PowerShell scripts for deprecated or retired Microsoft 365, Entra ID and Azure commands.
 
     .DESCRIPTION
-        Parses each script (nothing is executed) and reports every use of a deprecated or retired
-        command, parameter, module or endpoint - for example Get-MsolUser, Connect-AzureAD,
+        Parses each script or module manifest (nothing is executed) and reports every use of a
+        deprecated or retired command, parameter, module or endpoint - for example Get-MsolUser, Connect-AzureAD,
         Connect-ExchangeOnline -UseRPSSession or https://graph.windows.net - together with what to
         use instead.
 
@@ -17,7 +17,7 @@ function Invoke-M365DeprecationScan {
           Information = Announced   (retirement announced for a future date)
 
     .PARAMETER Path
-        Files or folders to scan. Folders are scanned for *.ps1 and *.psm1 files.
+        Files or folders to scan. Folders are scanned for *.ps1, *.psm1 and *.psd1 files.
         Defaults to the current folder. Accepts pipeline input (for example from Get-ChildItem).
 
     .PARAMETER ScriptDefinition
@@ -27,7 +27,7 @@ function Invoke-M365DeprecationScan {
         Also scan sub folders.
 
     .PARAMETER Include
-        File name patterns to scan inside folders. Default: *.ps1, *.psm1.
+        File name patterns to scan inside folders. Default: *.ps1, *.psm1, *.psd1 (module manifests).
 
     .PARAMETER Exclude
         Wildcard patterns matched against the full file path, for example '*\tests\*'.
@@ -97,7 +97,7 @@ function Invoke-M365DeprecationScan {
 
         [Parameter(ParameterSetName = 'Path')]
         [ValidateNotNullOrEmpty()]
-        [string[]]$Include = @('*.ps1', '*.psm1'),
+        [string[]]$Include = @('*.ps1', '*.psm1', '*.psd1'),
 
         [Parameter(ParameterSetName = 'Path')]
         [string[]]$Exclude,

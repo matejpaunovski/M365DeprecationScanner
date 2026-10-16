@@ -24,6 +24,23 @@ Get-LegacyUser
     }
 }
 
+Describe 'Module manifests are never executed' {
+    It 'does not run code from a .psd1 file' {
+        $marker = Join-Path $TestDrive 'psd1-executed.txt'
+        $manifest = Join-Path $TestDrive 'Evil.psd1'
+        Set-Content -LiteralPath $manifest -Value @"
+@{
+    RequiredModules = @('LegacyModule')
+    ScriptsToProcess = @('evil.ps1')
+    Description = `$(Set-Content -LiteralPath '$marker' -Value 'x')
+}
+"@
+        $result = @(Invoke-M365DeprecationScan -Path $manifest -ExcludeDefaultRules -CustomRulePath $script:RuleFile -WarningAction SilentlyContinue)
+        $result.RuleId | Should -Contain 'TEST0001'
+        Test-Path -LiteralPath $marker | Should -BeFalse
+    }
+}
+
 Describe 'Warnings cannot inject CI workflow commands' {
     It 'keeps parse error warnings on a single line' {
         $code = "Get-LegacyUser`n`$a = 1 `"x`n::warning title=PWNED::injected`n`""

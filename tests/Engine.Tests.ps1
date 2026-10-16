@@ -227,6 +227,68 @@ Describe 'File scanning' {
     }
 }
 
+Describe 'Module manifests (.psd1)' {
+    It 'finds <Description>' -ForEach @(
+        @{ Description = 'RequiredModules as a single string'; Code = "@{`n    RequiredModules = 'LegacyModule'`n}" }
+        @{ Description = 'RequiredModules as an array'; Code = "@{`n    RequiredModules = @('Other', 'LegacyModule')`n}" }
+        @{ Description = 'RequiredModules as a list without @()'; Code = "@{`n    RequiredModules = 'Other', 'LegacyModule'`n}" }
+        @{ Description = 'a module specification hashtable'; Code = "@{`n    RequiredModules = @(@{ ModuleName = 'LegacyModule'; ModuleVersion = '1.0' })`n}" }
+        @{ Description = 'a mix of strings and specifications'; Code = "@{`n    RequiredModules = @('Other', @{ ModuleName = 'LegacyModule'; RequiredVersion = '2.0' })`n}" }
+        @{ Description = 'NestedModules'; Code = "@{`n    NestedModules = @('LegacyModule')`n}" }
+        @{ Description = 'keys in any casing'; Code = "@{`n    requiredmodules = @('LegacyModule')`n}" }
+        @{ Description = 'quoted keys'; Code = "@{`n    'RequiredModules' = @('LegacyModule')`n}" }
+    ) {
+        $result = @(Invoke-TestScan $Code)
+        $result.RuleId | Should -Contain 'TEST0001'
+        ($result | Where-Object RuleId -EQ 'TEST0001').Line | Should -Be 2
+    }
+
+    It 'reports what was found in a readable way' {
+        (Invoke-TestScan "@{ RequiredModules = @('LegacyModule') }").Match | Should -Be 'RequiredModules LegacyModule'
+    }
+
+    It 'points at the module name itself' {
+        $result = Invoke-TestScan "@{`n    RequiredModules = @(`n        'Other'`n        'LegacyModule'`n    )`n}"
+        $result.Line | Should -Be 4
+        $result.Column | Should -Be 9
+    }
+
+    It 'does not flag <Description>' -ForEach @(
+        @{ Description = 'RootModule or other keys'; Code = "@{ RootModule = 'LegacyModule'; ModuleToProcess = 'LegacyModule'; Description = 'LegacyModule' }" }
+        @{ Description = 'modern modules'; Code = "@{ RequiredModules = @('ModernModule', @{ ModuleName = 'ModernModule'; ModuleVersion = '1.0' }) }" }
+        @{ Description = 'a hashtable assigned to a variable'; Code = "`$settings = @{ RequiredModules = @('LegacyModule') }" }
+        @{ Description = 'a hashtable passed to a command'; Code = "Write-Output @{ RequiredModules = @('LegacyModule') }" }
+        @{ Description = 'a nested hashtable'; Code = "@{ PrivateData = @{ RequiredModules = @('LegacyModule') } }" }
+        @{ Description = 'dynamic module names'; Code = "@{ RequiredModules = @(`$name) }" }
+        @{ Description = 'an empty list'; Code = "@{ RequiredModules = @() }" }
+    ) {
+        @(Invoke-TestScan $Code | Where-Object RuleId -EQ 'TEST0001').Count | Should -Be 0
+    }
+
+    It 'honours suppression comments in a manifest' {
+        @(Invoke-TestScan "@{`n    RequiredModules = @('LegacyModule') # m365ds-ignore: TEST0001`n}").Count | Should -Be 0
+    }
+
+    It 'finds <Code>' -ForEach @(
+        @{ Code = "New-ModuleManifest -Path x.psd1 -RequiredModules 'LegacyModule'" }
+        @{ Code = "New-ModuleManifest -Path x.psd1 -RequiredModules @('Other', 'LegacyModule')" }
+        @{ Code = "Update-ModuleManifest -Path x.psd1 -NestedModules @(@{ ModuleName = 'LegacyModule'; ModuleVersion = '1.0' })" }
+        @{ Code = "New-ModuleManifest -Path x.psd1 -RequiredModules:'LegacyModule'" }
+    ) {
+        @(Invoke-TestScan $Code).RuleId | Should -Contain 'TEST0001'
+    }
+
+    It 'scans .psd1 files in folders by default' {
+        $folder = Join-Path $TestDrive 'manifests'
+        New-Item -ItemType Directory -Path $folder | Out-Null
+        Set-Content -LiteralPath (Join-Path $folder 'My.Module.psd1') -Value "@{`n    ModuleVersion = '1.0'`n    RequiredModules = @('LegacyModule')`n}"
+        $result = @(Invoke-M365DeprecationScan -Path $folder -ExcludeDefaultRules -CustomRulePath $script:RuleFile)
+        $result.Count | Should -Be 1
+        Split-Path $result[0].Path -Leaf | Should -Be 'My.Module.psd1'
+        $result[0].Line | Should -Be 3
+    }
+}
+
 Describe 'Edge cases found in review' {
     It 'does not crash on an empty module name' {
         { Invoke-TestScan "Import-Module ''`nImport-Module `"`"" } | Should -Not -Throw

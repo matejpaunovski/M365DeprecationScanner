@@ -120,7 +120,7 @@ This finds `New-ContosoUser -LegacyLicense` and `New-ContosoUser -LegacyLicense:
 
 ### Module
 
-Matches the module name in `Import-Module`, `Install-Module`, `Update-Module`, `Save-Module`, `Install-PSResource`, `Update-PSResource`, `Save-PSResource`, `#Requires -Modules` and `using module`.
+Matches the module name in `Import-Module`, `Install-Module`, `Update-Module`, `Save-Module`, `Install-PSResource`, `Update-PSResource`, `Save-PSResource`, `#Requires -Modules`, `using module`, `RequiredModules` / `NestedModules` in module manifests (`.psd1`) and the same parameters of `New-ModuleManifest` / `Update-ModuleManifest`.
 
 ```json
 {

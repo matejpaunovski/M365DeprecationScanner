@@ -13,7 +13,7 @@ inputs:
   include:
     description: 'File name patterns to scan inside folders, separated by commas.'
     required: false
-    default: '*.ps1,*.psm1'
+    default: '*.ps1,*.psm1,*.psd1'
   exclude:
     description: 'Wildcard patterns matched against the full file path to skip, separated by commas. Example: */tests/*'
     required: false

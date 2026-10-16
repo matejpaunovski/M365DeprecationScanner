@@ -14,7 +14,7 @@ This page is for contributors and for anyone who wants to know why the scanner r
 ```mermaid
 flowchart LR
     A["deprecations.json<br/>+ custom rule files"] -->|"Get-DeprecationRuleSet<br/>validate, compile, cache"| R["Rule objects"]
-    S["*.ps1 / *.psm1 files<br/>or -ScriptDefinition"] -->|"Parser: ParseFile / ParseInput"| T["AST + tokens"]
+    S["*.ps1 / *.psm1 / *.psd1 files<br/>or -ScriptDefinition"] -->|"Parser: ParseFile / ParseInput"| T["AST + tokens"]
     R --> E["Find-DeprecationInAst"]
     T --> E
     E -->|"minus suppressed"| F["Findings"]
@@ -52,7 +52,7 @@ One parse error is ignored on purpose: `ModuleNotFoundDuringParse`. `using modul
 |---|---|---|
 | `Command` | `CommandAst` | Uses `GetCommandName()`. A module qualifier is stripped: `MSOnline\Get-MsolUser` matches `Get-MsolUser`. |
 | `Parameter` | `CommandParameterAst` inside a `CommandAst` | Both the command (`command`) and the parameter name (`pattern`) must match. `-Switch:$false` is not reported. |
-| `Module` | `CommandAst` of `Import-Module`, `Install-Module`, `Update-Module`, `Save-Module`, `Install-PSResource`, `Update-PSResource`, `Save-PSResource`; `UsingStatementAst` (`using module`); `ScriptRequirements` (`#Requires -Modules`) | Module names come from `-Name`, `-Name:`, the first positional argument, a list or `@(...)`. Only string constants count. Not found: aliases (`ipmo`), splatting and module paths. |
+| `Module` | `CommandAst` of `Import-Module`, `Install-Module`, `Update-Module`, `Save-Module`, `Install-PSResource`, `Update-PSResource`, `Save-PSResource`; `UsingStatementAst` (`using module`); `ScriptRequirements` (`#Requires -Modules`); top-level `HashtableAst` keys `RequiredModules` / `NestedModules` (module manifests) and the same parameters of `New-ModuleManifest` / `Update-ModuleManifest` | Module names come from `-Name`, `-Name:`, the first positional argument, a list or `@(...)`. Only string constants count. Manifest entries can be strings or `@{ ModuleName = ... }` specifications. A hashtable only counts as a manifest when it stands alone at the top level of the file, so ordinary hashtables in scripts are never mistaken for one. Not found: aliases (`ipmo`), splatting and module paths. |
 | `StringLiteral` | `StringConstantExpressionAst`, `ExpandableStringExpressionAst` | .NET regex, case-insensitive, 1 second timeout per match. The command name itself is skipped, and strings nested inside an expandable string are reported once, via the outer string. |
 
 Comments are tokens, not AST nodes, so they never produce findings.

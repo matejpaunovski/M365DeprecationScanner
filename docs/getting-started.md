@@ -49,7 +49,7 @@ Scan a whole folder including sub folders:
 Invoke-M365DeprecationScan -Path C:\Scripts -Recurse
 ```
 
-Without `-Path` the scanner uses the current folder. Folders are scanned for `*.ps1` and `*.psm1` files. A file you name explicitly is always scanned, whatever its extension.
+Without `-Path` the scanner uses the current folder. Folders are scanned for `*.ps1`, `*.psm1` and `*.psd1` (module manifest) files. A file you name explicitly is always scanned, whatever its extension.
 
 Want to try it first? The repository has a deliberately old script:
 
@@ -103,7 +103,7 @@ Invoke-M365DeprecationScan -Path C:\Scripts -Recurse | Group-Object Path | Sort-
 | `-MinimumSeverity` | Only `Warning` and up, or only `Error` | `-MinimumSeverity Error` |
 | `-Area` | Only certain product areas | `-Area MSOnline, AzureAD` |
 | `-ExcludeRuleId` | Ignore specific rules | `-ExcludeRuleId OTHER0001` |
-| `-Include` | File name patterns inside folders (default `*.ps1`, `*.psm1`) | `-Include *.ps1` |
+| `-Include` | File name patterns inside folders (default `*.ps1`, `*.psm1`, `*.psd1`) | `-Include *.ps1` |
 | `-Exclude` | Wildcards matched against the full file path | `-Exclude '*\tests\*'` |
 | `-Recurse` | Also scan sub folders | `-Recurse` |
 

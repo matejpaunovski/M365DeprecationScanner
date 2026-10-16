@@ -1,6 +1,6 @@
 @{
     RootModule           = 'M365DeprecationScanner.psm1'
-    ModuleVersion        = '0.1.0'
+    ModuleVersion        = '0.2.0'
     CompatiblePSEditions = @('Desktop', 'Core')
     GUID                 = 'b6f0a3d2-5c1e-4f7a-9d38-2e6c4a8b1f57'
     Author               = 'Matej'

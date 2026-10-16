@@ -65,7 +65,7 @@ It understands PowerShell, it does not just grep. It detects:
 
 - **commands**, also module-qualified (`MSOnline\Get-MsolUser`) and inside functions or pipelines
 - **parameters** on specific commands (`Connect-ExchangeOnline -UseRPSSession`)
-- **modules** in `Import-Module`, `Install-Module`, `#Requires -Modules` and `using module`
+- **modules** in `Import-Module`, `Install-Module`, `#Requires -Modules`, `using module` and in module manifests (`RequiredModules` / `NestedModules` in `.psd1` files)
 - **endpoints** in strings (`'https://graph.windows.net/...'`)
 
 Comments are ignored. **Your scripts are never executed**, only parsed. No tenant connection and no internet access needed.

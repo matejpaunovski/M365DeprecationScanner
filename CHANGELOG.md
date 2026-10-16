@@ -7,6 +7,14 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-16
+
+### Added
+
+- Module manifests: retired modules in `RequiredModules` and `NestedModules` of `.psd1` files are now reported, both as plain names and as `@{ ModuleName = ... }` specifications. The same applies to `New-ModuleManifest` / `Update-ModuleManifest -RequiredModules / -NestedModules`.
+- Folders are now scanned for `*.psd1` files by default (`-Include` and the GitHub Action `include` input default to `*.ps1, *.psm1, *.psd1`).
+- Example manifest in `examples/legacy-module`.
+
 ## [0.1.0] - 2026-10-16
 
 ### Added
@@ -24,5 +32,6 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 - Initial rule database covering MSOnline, AzureAD/AzureADPreview, Exchange Online, Azure AD Graph, AzureRM, Microsoft Graph PowerShell SDK, Teams and SharePoint. See [docs/rules.md](docs/rules.md).
 
-[Unreleased]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/matejpaunovski/M365DeprecationScanner/releases/tag/v0.1.0
