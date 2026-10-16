@@ -25,7 +25,7 @@ function New-DeprecationFinding {
         $message += ' (Retirement: {0})' -f $Rule.RetirementDate
     }
 
-    [pscustomobject]@{
+    $finding = [pscustomobject]@{
         PSTypeName        = 'M365DeprecationScanner.Finding'
         RuleId            = $Rule.Id
         Severity          = $Rule.Severity
@@ -46,6 +46,9 @@ function New-DeprecationFinding {
         EndLine           = $Extent.EndLineNumber
         EndColumn         = $Extent.EndColumnNumber
         LineText          = $Extent.StartScriptPosition.Line.Trim()
-        Extent            = $Extent
     }
+    # The syntax-tree position is only needed internally (VS Code / PSScriptAnalyzer). As a method it
+    # stays out of Format-List, Select-Object *, CSV and JSON output.
+    $finding | Add-Member -MemberType ScriptMethod -Name GetExtent -Value { $Extent }.GetNewClosure()
+    $finding
 }

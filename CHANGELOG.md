@@ -7,6 +7,12 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-16
+
+### Fixed
+
+- Findings no longer show the internal `Extent` property in `Format-List`, `Select-Object *` or `ConvertTo-Json` output. The syntax-tree position is still available through the `GetExtent()` method.
+
 ## [0.2.0] - 2026-10-16
 
 ### Added
@@ -32,6 +38,7 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 - Initial rule database covering MSOnline, AzureAD/AzureADPreview, Exchange Online, Azure AD Graph, AzureRM, Microsoft Graph PowerShell SDK, Teams and SharePoint. See [docs/rules.md](docs/rules.md).
 
-[Unreleased]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/matejpaunovski/M365DeprecationScanner/releases/tag/v0.1.0

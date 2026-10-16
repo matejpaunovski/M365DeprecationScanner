@@ -61,7 +61,7 @@ function Measure-M365Deprecation {
     foreach ($finding in Find-DeprecationInAst -Ast $ScriptBlockAst -Rules $rules -Tokens $tokens -FilePath $filePath) {
         $record = [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
             Message  = '[{0}] {1}' -f $finding.RuleId, $finding.Message
-            Extent   = $finding.Extent
+            Extent   = $finding.GetExtent()
             RuleName = 'M365DeprecationScanner.Rules\Measure-M365Deprecation'
             Severity = $severityMap[$finding.Severity]
         }

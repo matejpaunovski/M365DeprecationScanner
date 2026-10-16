@@ -29,7 +29,7 @@ function Find-DeprecationInAst {
 
     # Findings are collected first and returned sorted by position in the file.
     @(Find-DeprecationInAstUnsorted @PSBoundParameters) |
-        Sort-Object -Property @{ Expression = { $_.Extent.StartOffset } }, RuleId
+        Sort-Object -Property Line, Column, RuleId
 }
 
 function Find-DeprecationInAstUnsorted {

@@ -227,6 +227,33 @@ Describe 'File scanning' {
     }
 }
 
+Describe 'Finding object' {
+    BeforeAll {
+        $script:Finding = Invoke-TestScan 'Get-LegacyUser -All'
+    }
+
+    It 'has no internal Extent property' {
+        $script:Finding.PSObject.Properties.Name | Should -Not -Contain 'Extent'
+    }
+
+    It 'does not show Extent in Format-List' {
+        ($script:Finding | Format-List | Out-String) | Should -Not -Match '(?m)^Extent\s*:'
+    }
+
+    It 'still exposes the position through GetExtent()' {
+        $extent = $script:Finding.GetExtent()
+        $extent | Should -BeOfType [System.Management.Automation.Language.IScriptExtent]
+        $extent.Text | Should -Be 'Get-LegacyUser'
+        $extent.StartLineNumber | Should -Be $script:Finding.Line
+    }
+
+    It 'converts to JSON directly without internal objects' {
+        $json = $script:Finding | ConvertTo-Json -Depth 3 | ConvertFrom-Json
+        $json.RuleId | Should -Be 'TEST0002'
+        $json.PSObject.Properties.Name | Should -Not -Contain 'Extent'
+    }
+}
+
 Describe 'Module manifests (.psd1)' {
     It 'finds <Description>' -ForEach @(
         @{ Description = 'RequiredModules as a single string'; Code = "@{`n    RequiredModules = 'LegacyModule'`n}" }
