@@ -7,10 +7,6 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 ## [Unreleased]
 
-### Rules
-
-- MGSDK0001 (`Select-MgProfile`): replacement now says that `Select-MgProfile -Name v1.0` can simply be deleted; the Beta module is only needed for beta calls.
-
 ## [0.1.0] - 2026-10-16
 
 ### Added
@@ -26,7 +22,7 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 ### Rules
 
-- Initial rule database covering MSOnline, AzureAD/AzureADPreview, Exchange Online, Azure AD Graph, AzureRM, Microsoft Graph PowerShell SDK, Teams, SharePoint and Intune. See [docs/rules.md](docs/rules.md).
+- Initial rule database covering MSOnline, AzureAD/AzureADPreview, Exchange Online, Azure AD Graph, AzureRM, Microsoft Graph PowerShell SDK, Teams and SharePoint. See [docs/rules.md](docs/rules.md).
 
 [Unreleased]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/matejpaunovski/M365DeprecationScanner/releases/tag/v0.1.0

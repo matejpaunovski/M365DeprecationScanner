@@ -59,7 +59,7 @@ Try it yourself: [examples/legacy-script.ps1](examples/legacy-script.ps1) is a t
 | **Azure AD Graph** | `https://graph.windows.net/...` → `https://graph.microsoft.com/...` |
 | **AzureRM** | `Login-AzureRmAccount` → `Connect-AzAccount`, `Get-AzureRm*` → `Get-Az*` |
 | **Microsoft Graph SDK v1** | `Select-MgProfile` → `Microsoft.Graph.Beta` module |
-| **Teams, SharePoint, Intune** | `SkypeOnlineConnector`, `SharePointPnPPowerShellOnline`, `Microsoft.Graph.Intune` |
+| **Teams, SharePoint** | `SkypeOnlineConnector`, `New-CsOnlineSession`, `SharePointPnPPowerShellOnline`, `Connect-PnPOnline -ClientSecret` (ACS) |
 
 It understands PowerShell, it does not just grep. It detects:
 
