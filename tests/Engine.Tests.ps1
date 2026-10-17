@@ -7,7 +7,7 @@ BeforeAll {
 
     function Invoke-TestScan {
         param([string]$Code, [hashtable]$Extra = @{})
-        Invoke-M365DeprecationScan -ScriptDefinition $Code -ExcludeDefaultRules -CustomRulePath $script:RuleFile @Extra
+        Invoke-M365DeprecationScan -ScriptDefinition $Code -ExcludeDefaultRules -CustomRulePath $script:RuleFile @Extra 6>$null
     }
 }
 
@@ -174,6 +174,53 @@ Describe 'Filters' {
     }
 }
 
+Describe 'Clean scan message' {
+    BeforeAll {
+        $script:CleanFile = Join-Path $TestDrive 'clean.ps1'
+        Set-Content -LiteralPath $script:CleanFile -Value 'Get-MgUser -All'
+
+        function Get-ScanMessage {
+            param([hashtable]$Scan)
+            $info = $null
+            $result = @(Invoke-M365DeprecationScan -ExcludeDefaultRules -CustomRulePath $script:RuleFile -InformationVariable info @Scan 6>$null)
+            [pscustomobject]@{ Count = $result.Count; Message = "$info" }
+        }
+    }
+
+    It 'confirms a clean script on the host, not in the pipeline' {
+        $scan = Get-ScanMessage @{ ScriptDefinition = 'Get-MgUser -All' }
+        $scan.Count | Should -Be 0
+        $scan.Message | Should -Be 'No deprecated or retired commands found in the script.'
+    }
+
+    It 'names the number of scanned files' {
+        (Get-ScanMessage @{ Path = $script:CleanFile }).Message | Should -Be 'No deprecated or retired commands found in 1 file(s).'
+    }
+
+    It 'mentions active filters' {
+        (Get-ScanMessage @{ ScriptDefinition = 'Get-LegacyUser'; Area = 'AzureAD' }).Message | Should -BeLike '*with the current filters.'
+    }
+
+    It 'stays silent when there are findings' {
+        $scan = Get-ScanMessage @{ ScriptDefinition = 'Get-LegacyUser' }
+        $scan.Count | Should -Be 1
+        $scan.Message | Should -BeNullOrEmpty
+    }
+
+    It 'can be hidden with -InformationAction SilentlyContinue' {
+        # Write-Host records (tag PSHOST) are always displayed; plain information records honour the preference.
+        $info = $null
+        $null = Invoke-M365DeprecationScan -ScriptDefinition 'Get-MgUser' -ExcludeDefaultRules -CustomRulePath $script:RuleFile -InformationAction SilentlyContinue -InformationVariable info
+        @($info).Count | Should -Be 1
+        $info[0].Tags | Should -Not -Contain 'PSHOST'
+    }
+
+    It 'shows the message with -InformationAction Continue' {
+        $shown = Invoke-M365DeprecationScan -ScriptDefinition 'Get-MgUser' -ExcludeDefaultRules -CustomRulePath $script:RuleFile -InformationAction Continue 6>&1
+        "$shown" | Should -Be 'No deprecated or retired commands found in the script.'
+    }
+}
+
 Describe 'File scanning' {
     BeforeAll {
         $script:Root = Join-Path $TestDrive 'scripts'
@@ -220,6 +267,14 @@ Describe 'File scanning' {
         $result = Invoke-M365DeprecationScan -Path (Join-Path $script:Root 'broken.ps1') -ExcludeDefaultRules -CustomRulePath $script:RuleFile -WarningVariable warnings -WarningAction SilentlyContinue
         $result.RuleId | Should -Be 'TEST0002'
         $warnings.Count | Should -BeGreaterThan 0
+    }
+
+    It 'warns when a folder contains no files to scan' {
+        $empty = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'empty') -Force
+        $warnings = $null
+        $result = Invoke-M365DeprecationScan -Path $empty.FullName -ExcludeDefaultRules -CustomRulePath $script:RuleFile -WarningVariable warnings -WarningAction SilentlyContinue
+        $result | Should -BeNullOrEmpty
+        $warnings | Should -BeLike '*No files were scanned*'
     }
 
     It 'writes an error for a missing path' {

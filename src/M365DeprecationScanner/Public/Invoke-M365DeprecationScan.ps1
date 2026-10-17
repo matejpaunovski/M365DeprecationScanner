@@ -16,6 +16,9 @@ function Invoke-M365DeprecationScan {
           Warning     = Deprecated  (still works, but support has ended or retirement is announced)
           Information = Announced   (retirement announced for a future date)
 
+        When nothing is found, a short confirmation is printed to the console (not to the pipeline).
+        Hide it with -InformationAction SilentlyContinue.
+
     .PARAMETER Path
         Files or folders to scan. Folders are scanned for *.ps1, *.psm1 and *.psd1 files.
         Defaults to the current folder. Accepts pipeline input (for example from Get-ChildItem).
@@ -144,6 +147,8 @@ function Invoke-M365DeprecationScan {
         }
 
         $scannedFiles = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+        # Counted so that a clean scan can say so instead of returning silently.
+        $findingCount = 0
     }
 
     process {
@@ -152,7 +157,8 @@ function Invoke-M365DeprecationScan {
             $parseErrors = $null
             $ast = [System.Management.Automation.Language.Parser]::ParseInput($ScriptDefinition, [ref]$tokens, [ref]$parseErrors)
             Write-ParseErrorWarning -ParseErrors $parseErrors -Source '<ScriptDefinition>'
-            Find-DeprecationInAst -Ast $ast -Rules $rules -Tokens $tokens -FilePath $null | Where-Object { & $isWanted $_ }
+            Find-DeprecationInAst -Ast $ast -Rules $rules -Tokens $tokens -FilePath $null |
+                ForEach-Object { if (& $isWanted $_) { $findingCount++; $_ } }
             return
         }
 
@@ -166,12 +172,34 @@ function Invoke-M365DeprecationScan {
                 $parseErrors = $null
                 $ast = [System.Management.Automation.Language.Parser]::ParseFile($file, [ref]$tokens, [ref]$parseErrors)
                 Write-ParseErrorWarning -ParseErrors $parseErrors -Source $file
-                Find-DeprecationInAst -Ast $ast -Rules $rules -Tokens $tokens -FilePath $file | Where-Object { & $isWanted $_ }
+                Find-DeprecationInAst -Ast $ast -Rules $rules -Tokens $tokens -FilePath $file |
+                    ForEach-Object { if (& $isWanted $_) { $findingCount++; $_ } }
             }
         }
     }
 
     end {
         Write-Verbose ('Scanned {0} file(s).' -f $scannedFiles.Count)
+
+        # Status lines go to the information stream, not the pipeline, so
+        # '$result = Invoke-M365DeprecationScan' stays empty.
+        if ($findingCount -gt 0) {
+            return
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Path' -and $scannedFiles.Count -eq 0) {
+            Write-Warning 'No files were scanned. Check -Path and -Include, or add -Recurse to scan sub folders.'
+            return
+        }
+        $scope = if ($PSCmdlet.ParameterSetName -eq 'Path') { '{0} file(s)' -f $scannedFiles.Count } else { 'the script' }
+        $filtered = $MinimumSeverity -ne 'Information' -or $Area -or $excludedIds.Count -gt 0
+        $suffix = if ($filtered) { ' with the current filters' } else { '' }
+        $message = 'No deprecated or retired commands found in {0}{1}.' -f $scope, $suffix
+        if ($PSBoundParameters.ContainsKey('InformationAction')) {
+            # Honours -InformationAction SilentlyContinue (Write-Host would ignore it).
+            Write-Information -MessageData $message
+        }
+        else {
+            Write-Host $message -ForegroundColor Green
+        }
     }
 }

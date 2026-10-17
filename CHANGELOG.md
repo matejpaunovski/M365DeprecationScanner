@@ -7,6 +7,13 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-17
+
+### Added
+
+- `Invoke-M365DeprecationScan` confirms a clean scan, for example "No deprecated or retired commands found in 12 file(s).", instead of returning silently. The line goes to the console, not the pipeline; hide it with `-InformationAction SilentlyContinue`.
+- A warning when no files were scanned at all, for example a folder whose scripts are only in sub folders and `-Recurse` was not given.
+
 ### Changed
 
 - The release workflow now moves the major version tag (`v0`) to each new release, so `uses: matejpaunovski/M365DeprecationScanner@v0` always gets the latest 0.x version.
@@ -43,7 +50,8 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 - Initial rule database covering MSOnline, AzureAD/AzureADPreview, Exchange Online, Azure AD Graph, AzureRM, Microsoft Graph PowerShell SDK, Teams and SharePoint. See [docs/rules.md](docs/rules.md).
 
-[Unreleased]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/matejpaunovski/M365DeprecationScanner/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/matejpaunovski/M365DeprecationScanner/releases/tag/v0.1.0

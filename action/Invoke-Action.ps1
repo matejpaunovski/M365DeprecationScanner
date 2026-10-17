@@ -48,6 +48,8 @@ $scanParameters = @{
     Path            = @(Split-ActionInput $env:M365DS_PATH | ForEach-Object { if ([System.IO.Path]::IsPathRooted($_)) { $_ } else { Join-Path $workspace $_ } })
     Recurse         = $true
     MinimumSeverity = $minimumSeverity
+    # The summary line below already reports a clean scan.
+    InformationAction = 'SilentlyContinue'
 }
 if ($scanParameters.Path.Count -eq 0) { $scanParameters.Path = @($workspace) }
 $include = Split-ActionInput $env:M365DS_INCLUDE

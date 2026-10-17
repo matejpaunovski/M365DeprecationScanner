@@ -63,6 +63,14 @@ You can also check a snippet without saving it:
 Invoke-M365DeprecationScan -ScriptDefinition 'Connect-MsolService; Get-MsolUser -All'
 ```
 
+If nothing is found, you get a short confirmation instead of an empty prompt:
+
+```text
+No deprecated or retired commands found in 12 file(s).
+```
+
+The line goes to the console, not to the pipeline, so `$result = Invoke-M365DeprecationScan ...` stays empty. Add `-InformationAction SilentlyContinue` to hide it, for example in scheduled scripts.
+
 ## Reading the output
 
 The default view is a table:
@@ -167,6 +175,8 @@ The scanner does not rewrite code for you. That is on purpose: replacements ofte
 ## Common problems
 
 **`Invoke-M365DeprecationScan` is not recognised.** The module is not loaded. Run `Import-Module M365DeprecationScanner` (or the path to `src/M365DeprecationScanner` in a clone).
+
+**Warning "No files were scanned".** The folder contains no `*.ps1`, `*.psm1` or `*.psd1` files at the top level. Add `-Recurse` to include sub folders, or check `-Path`, `-Include` and `-Exclude`.
 
 **Warning "has N syntax error(s), results may be incomplete".** The file does not parse cleanly. The scanner still reports what it can find. Fix the syntax error to get complete results.
 

@@ -81,7 +81,7 @@ Describe 'Rule <Id>' -ForEach $script:RuleCases {
 Describe 'Scanner against the built-in database' {
     It 'finds nothing in modern example code' {
         $modern = Join-Path (Split-Path $PSScriptRoot -Parent) 'examples/modern-script.ps1'
-        @(Invoke-M365DeprecationScan -Path $modern).Count | Should -Be 0
+        @(Invoke-M365DeprecationScan -Path $modern 6>$null).Count | Should -Be 0
     }
 
     It 'finds the legacy example code' {
