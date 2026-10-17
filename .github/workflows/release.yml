@@ -62,3 +62,17 @@ jobs:
           GH_REPO: ${{ github.repository }}
           TAG: ${{ github.ref_name }}
         run: gh release create "$TAG" --title "$TAG" --generate-notes
+
+      # Workflows reference the action as @v0 / @v1, so the major tag follows the latest release.
+      - name: Move the major version tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          major="${TAG%%.*}"
+          if gh api "repos/$GH_REPO/git/ref/tags/$major" --silent 2>/dev/null; then
+            gh api -X PATCH "repos/$GH_REPO/git/refs/tags/$major" -f sha="$GITHUB_SHA" -F force=true --silent
+          else
+            gh api -X POST "repos/$GH_REPO/git/refs" -f ref="refs/tags/$major" -f sha="$GITHUB_SHA" --silent
+          fi

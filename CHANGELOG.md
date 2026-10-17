@@ -7,6 +7,11 @@ Rule database changes (new or corrected rules) are listed under **Rules**.
 
 ## [Unreleased]
 
+### Changed
+
+- The release workflow now moves the major version tag (`v0`) to each new release, so `uses: matejpaunovski/M365DeprecationScanner@v0` always gets the latest 0.x version.
+- CI uses `actions/checkout@v7` and `actions/upload-artifact@v7`.
+
 ## [0.2.1] - 2026-10-16
 
 ### Fixed
