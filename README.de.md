@@ -12,6 +12,65 @@ Alte Skripte merken davon nichts, bis sie laufen. Dann scheitert der geplante Ta
 
 Der M365 Deprecation Scanner beantwortet das in Sekunden.
 
+## So benutzt du es
+
+### Schritt 1: Modul installieren
+
+PowerShell öffnen (Adminrechte sind nicht nötig) und ausführen:
+
+```powershell
+Install-Module -Name M365DeprecationScanner -Scope CurrentUser
+```
+
+Funktioniert mit Windows PowerShell 5.1 und PowerShell 7. Ab PowerShell 7.4 geht auch `Install-PSResource -Name M365DeprecationScanner`.
+Du brauchst weder MSOnline noch AzureAD oder ein anderes Microsoft-Modul und auch keine Verbindung zu deinem Tenant.
+
+### Schritt 2: Skripte scannen
+
+Nimm die Zeile, die zu dem passt, was du scannen willst:
+
+| Befehl | Was passiert |
+|---|---|
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse` | **Scannt den ganzen Ordner inklusive aller Unterordner.** Das willst du meistens. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts` | Scannt nur die Dateien direkt in `C:\Scripts`, **nicht** die Unterordner. |
+| `Invoke-M365DeprecationScan -Path . -Recurse` | Scannt den Ordner, in dem du gerade bist (vorher mit `cd` hinwechseln), inklusive Unterordner. |
+| `Invoke-M365DeprecationScan -Path .\Get-Licenses.ps1` | Scannt eine einzelne Datei. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts, D:\Automation -Recurse` | Scannt mehrere Ordner auf einmal. |
+| `Invoke-M365DeprecationScan -ScriptDefinition 'Get-MsolUser -All'` | Prüft ein Code-Schnipsel, ohne es als Datei zu speichern. |
+
+In Ordnern werden `.ps1`-, `.psm1`- und `.psd1`-Dateien gesucht. Deine Skripte werden nur gelesen, nie ausgeführt.
+
+### Schritt 3: Ergebnis lesen
+
+Jede Zeile im Ergebnis ist eine Stelle in deinem Code, die du dir ansehen solltest:
+
+- **File / Line**: wo die Stelle ist.
+- **Severity**: `Error` = funktioniert nicht mehr, jetzt fixen. `Warning` = läuft noch, ist aber veraltet, bald fixen. `Information` = Abschaltung angekündigt, einplanen.
+- **Found**: der alte Befehl, Parameter, das Modul oder die URL.
+- **Use instead**: was du stattdessen nimmst.
+
+Wird nichts gefunden, sagt der Scanner das: `No deprecated or retired commands found in 12 file(s).`
+
+### Schritt 4: Mehr Details (optional)
+
+| Befehl | Was passiert |
+|---|---|
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse \| Format-List` | Zeigt alle Details pro Fund: Migrationshinweise, Abschaltdatum und die offizielle Microsoft-Quelle. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse -MinimumSeverity Error` | Zeigt nur, was schon kaputt ist. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse -Exclude '*\archiv\*'` | Lässt Ordner oder Dateien aus, die dich nicht interessieren. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse \| Export-M365DeprecationReport -Format Html -Path .\report.html` | Erstellt einen HTML-Report für den Browser oder zum Weiterschicken ans Team. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse \| Export-M365DeprecationReport -Format Csv -Path .\report.csv` | Erstellt eine CSV-Datei für Excel. |
+| `Get-M365DeprecationRule -Name Get-MsolUser \| Format-List` | Schlägt einen einzelnen Befehl nach: was ihn ersetzt und warum. |
+| `Get-Help Invoke-M365DeprecationScan -Full` | Zeigt die komplette eingebaute Hilfe mit allen Parametern und Beispielen. |
+
+### Schritt 5: Fixen und nochmal scannen
+
+Ersetze die alten Befehle nacheinander (die Spalte **Use instead** und die verlinkte Microsoft-Doku sagen dir wie) und lass denselben Scan danach nochmal laufen, bis nichts mehr gefunden wird.
+
+Für neue Regeln später einfach das Modul aktualisieren: `Update-Module M365DeprecationScanner`.
+
+Mehr dazu: [Getting started](docs/getting-started.md) (Englisch).
+
 ## Was es findet
 
 | Bereich | Beispiele (alt → neu) |
@@ -32,36 +91,6 @@ Der Scanner versteht PowerShell, er macht kein einfaches Textsuchen. Er erkennt:
 - **Endpunkte** in Strings (`'https://graph.windows.net/...'`)
 
 Kommentare werden ignoriert. Alle Regeln findest du im [Regelkatalog](docs/rules.md).
-
-## Schnellstart
-
-1. Modul installieren:
-
-   ```powershell
-   Install-PSResource -Name M365DeprecationScanner -Scope CurrentUser
-   ```
-
-   Unter Windows PowerShell 5.1 geht auch `Install-Module -Name M365DeprecationScanner -Scope CurrentUser`.
-
-2. Skriptordner scannen:
-
-   ```powershell
-   Invoke-M365DeprecationScan -Path C:\Scripts -Recurse
-   ```
-
-3. Details zu jedem Fund anzeigen (Migrationshinweise, Abschaltdatum, Quellen):
-
-   ```powershell
-   Invoke-M365DeprecationScan -Path C:\Scripts -Recurse | Format-List
-   ```
-
-Du willst nur wissen, was einen bestimmten Befehl ersetzt?
-
-```powershell
-Get-M365DeprecationRule -Name Get-MsolUser
-```
-
-Mehr dazu: [Getting started](docs/getting-started.md) (Englisch).
 
 ## Beispielausgabe
 

@@ -12,7 +12,7 @@ Scans your scripts for retired and deprecated Microsoft 365, Entra ID and Azure 
 ![PowerShell 5.1 | 7+](https://img.shields.io/badge/PowerShell-5.1%20%7C%207%2B-5391FE)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[Quick start](#quick-start) · [VS Code](#2-in-vs-code) · [GitHub Action](#3-in-cicd-github-action) · [Rule catalog](docs/rules.md) · [Deutsch](README.de.md)
+[How to use](#how-to-use) · [VS Code](#2-in-vs-code) · [GitHub Action](#3-in-cicd-github-action) · [Rule catalog](docs/rules.md) · [Deutsch](README.de.md)
 
 </div>
 
@@ -49,6 +49,65 @@ legacy-script.ps1   41 Error    AADG0001 graph.windows.net                     M
 Try it yourself: [examples/legacy-script.ps1](examples/legacy-script.ps1) is a typical old admin script,
 [examples/modern-script.ps1](examples/modern-script.ps1) does the same with current modules and has zero findings.
 
+## How to use
+
+### Step 1: Install the module
+
+Open PowerShell (no admin rights needed) and run:
+
+```powershell
+Install-Module -Name M365DeprecationScanner -Scope CurrentUser
+```
+
+Works on Windows PowerShell 5.1 and PowerShell 7. On PowerShell 7.4+ you can also use `Install-PSResource -Name M365DeprecationScanner`.
+You do not need MSOnline, AzureAD or any other Microsoft module, and no connection to your tenant.
+
+### Step 2: Scan your scripts
+
+Pick the line that matches what you want to scan:
+
+| Command | What happens |
+|---|---|
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse` | **Scans the whole folder including all sub folders.** This is what you usually want. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts` | Scans only the files directly in `C:\Scripts`, **not** the sub folders. |
+| `Invoke-M365DeprecationScan -Path . -Recurse` | Scans the folder you are currently in (`cd` there first), including sub folders. |
+| `Invoke-M365DeprecationScan -Path .\Get-Licenses.ps1` | Scans one single file. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts, D:\Automation -Recurse` | Scans several folders in one go. |
+| `Invoke-M365DeprecationScan -ScriptDefinition 'Get-MsolUser -All'` | Checks a code snippet without saving it to a file. |
+
+Folders are searched for `.ps1`, `.psm1` and `.psd1` files. Your scripts are only read, never executed.
+
+### Step 3: Read the result
+
+Each line in the result is one place in your code that needs attention:
+
+- **File / Line**: where it is.
+- **Severity**: `Error` = no longer works, fix now. `Warning` = still works but is deprecated, fix soon. `Information` = switch-off announced, plan ahead.
+- **Found**: the old command, parameter, module or URL.
+- **Use instead**: what to replace it with.
+
+If nothing is found, the scanner says so: `No deprecated or retired commands found in 12 file(s).`
+
+### Step 4: Go deeper (optional)
+
+| Command | What happens |
+|---|---|
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse \| Format-List` | Shows every detail per finding: migration notes, retirement date and the official Microsoft source. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse -MinimumSeverity Error` | Shows only what is already broken. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse -Exclude '*\archive\*'` | Skips folders or files you do not care about. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse \| Export-M365DeprecationReport -Format Html -Path .\report.html` | Creates an HTML report you can open in the browser or send to your team. |
+| `Invoke-M365DeprecationScan -Path C:\Scripts -Recurse \| Export-M365DeprecationReport -Format Csv -Path .\report.csv` | Creates a CSV file for Excel. |
+| `Get-M365DeprecationRule -Name Get-MsolUser \| Format-List` | Looks up one command: what replaces it and why. |
+| `Get-Help Invoke-M365DeprecationScan -Full` | Shows the full built-in help with all parameters and examples. |
+
+### Step 5: Fix and scan again
+
+Replace the old commands one by one (the **Use instead** column and the linked Microsoft docs tell you how), then run the same scan again until it is clean.
+
+To get new rules later, update the module: `Update-Module M365DeprecationScanner`.
+
+More details: [Getting started guide](docs/getting-started.md).
+
 ## What it finds
 
 | Area | Examples (old → new) |
@@ -71,26 +130,6 @@ It understands PowerShell, it does not just grep. It detects:
 Comments are ignored. **Your scripts are never executed**, only parsed. No tenant connection and no internet access needed.
 
 Every rule links to an **official Microsoft source**. See the full [rule catalog](docs/rules.md).
-
-## Quick start
-
-```powershell
-Install-PSResource M365DeprecationScanner      # or: Install-Module M365DeprecationScanner -Scope CurrentUser
-
-Invoke-M365DeprecationScan -Path C:\Scripts -Recurse
-```
-
-Want details for each finding (migration notes, retirement date, source links)?
-
-```powershell
-Invoke-M365DeprecationScan -Path C:\Scripts -Recurse | Format-List
-```
-
-Just want to know what replaces one command?
-
-```powershell
-Get-M365DeprecationRule -Name Get-MsolUser | Format-List
-```
 
 ## Three ways to use it
 
